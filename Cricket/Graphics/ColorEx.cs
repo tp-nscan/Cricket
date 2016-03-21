@@ -24,7 +24,6 @@ namespace Cricket.Graphics
 
         public static IEnumerable<Color> UniformSpread(Color lowColor, Color hiColor, int stepCount)
         {
-
             yield break;
         //    return Enumerable.Range(0, stepCount).Select
         //        (
@@ -50,7 +49,6 @@ namespace Cricket.Graphics
                         G = (byte) ((1.0 + Math.Sin(i*Math.PI*2.0/w2))/2.0),
                         B = (byte) ((2.0 + Math.Cos(i*Math.PI*2.0/w2) + Math.Cos(i*Math.PI*2.0/width))/4.0)
                     }
-
                 );
         }
 

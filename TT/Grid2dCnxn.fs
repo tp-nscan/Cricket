@@ -4,7 +4,6 @@ open MathNet.Numerics
 open MathNet.Numerics.Random
 open MathNet.Numerics.LinearAlgebra
 open MathNet.Numerics.LinearAlgebra.Matrix
-open MathNetUt
 
 module Grid2dCnxn =
     

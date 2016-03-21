@@ -77,13 +77,13 @@ module NumUt =
 
 module BT =
 
-    let AntiLofS = 
+    let AntiIofS = 
         { 
             I.Min = System.Single.PositiveInfinity; 
             Max = System.Single.NegativeInfinity; 
         }
 
-    let AntiLofInt = 
+    let AntiIofInt = 
         { 
             I.Min = System.Int32.MaxValue; 
             Max = System.Int32.MinValue;
@@ -105,6 +105,27 @@ module BT =
             MaxY = System.Int32.MinValue; 
         }
 
+
+    // makes an interval from arbitrary values with the expected ordering
+    let inline RegularI< ^a when ^a: comparison> (x1:^a) (x2:^a) =
+        if x1 < x2 then
+            { I.Min=x1; I.Max=x2 }
+        else 
+            { I.Min=x2; I.Max=x1 }
+            
+
+    // makes a rectangle from arbitrary values with the expected orderings
+    let inline RegularR< ^a when ^a: comparison> (x1:^a) (x2:^a) (y1:^a) (y2:^a) =
+        if x1 < x2 then
+            if y1 < y2 then
+                { R.MinX=x1; R.MaxX=x2; R.MinY=y1; R.MaxY=y2; }
+            else 
+                { R.MinX=x1; R.MaxX=x2; R.MinY=y2; R.MaxY=y1; }
+        else 
+            if y1 < y2 then
+                { R.MinX=x2; R.MaxX=x1; R.MinY=y1; R.MaxY=y2; }
+            else 
+                { R.MinX=x2; R.MaxX=x1; R.MinY=y2; R.MaxY=y1; }
 
 
     let inline walk_the_creature_2 (creature:^a when ^a:(member Walk : unit -> unit)) =
@@ -162,10 +183,18 @@ module BT =
        (^a : (member MinY : ^b) range) <= (^c : (member Y : ^b) p2)
 
 
-    let inline StretchI (range:I< ^b>) (p1:^b ) =
+    let inline StretchIP (range:I< ^b>) (p1:^b ) =
         { 
             I.Min = if (range.Min > p1) then p1 else range.Min
             Max   = if (range.Max < p1) then p1 else range.Max
+        }
+
+
+    let inline StretchII (range:I< ^b>) (iv:^c when ^c:(member Min : ^b)
+                                                and ^c:(member Max : ^b) ) =
+        { 
+            I.Min = if (range.Min > (^c : (member Min : ^b) iv)) then (^c : (member Min : ^b) iv) else range.Min
+            Max   = if (range.Max < (^c : (member Max : ^b) iv)) then (^c : (member Max : ^b) iv) else range.Max
         }
 
 
@@ -200,24 +229,30 @@ module BT =
         }
 
 
-    let inline BoundingBoxP (box:R< ^b>) (p2:seq< ^c> when ^c:(member X : ^b) and ^c:(member Y : ^b) ) =
+    let inline BoundingRP (box:R< ^b>) (p2:seq< ^c> when ^c:(member X : ^b) and ^c:(member Y : ^b) ) =
             p2 |> Seq.fold (fun acc elem -> StretchRP acc elem ) box
 
 
-    let inline BoundingBoxR (box:R< ^b>) 
+    let inline BoundingRR (box:R< ^b>) 
                             (rects:seq< ^c> when ^c:(member MinX : ^b) and ^c:(member MaxX : ^b) 
                                              and ^c:(member MinY : ^b) and ^c:(member MaxY : ^b)) =
             rects |> Seq.fold (fun acc elem -> StretchRR acc elem ) box
 
 
-    let inline BoundingBoxL (box:R< ^b>) 
+    let inline BoundingRM2x2 (box:R< ^b>) 
                             (lines:seq< ^c> when ^c:(member X1 : ^b) and ^c:(member X2 : ^b) 
                                              and ^c:(member Y1 : ^b) and ^c:(member Y2 : ^b)) =
             lines |> Seq.fold (fun acc elem -> StretchRL acc elem ) box
 
 
-    let inline BoundingI (range:I< ^b>) (p1:seq< ^b>) =
-            p1 |> Seq.fold (fun acc elem -> StretchI acc elem ) range
+    let inline BoundingIP (range:I< ^b>) (p1:seq< ^b>) =
+            p1 |> Seq.fold (fun acc elem -> StretchIP acc elem ) range
+
+
+    let inline BoundingII (range:I< ^b>) 
+                          (sI:seq< ^a> when ^a:(member Min: ^b) 
+                                        and ^a:(member Max: ^b)) =
+            sI |> Seq.fold (fun acc elem -> StretchII acc elem ) range
 
 
 

@@ -54,10 +54,11 @@
     <Compile Include="Rop.fs" />
     <Compile Include="BT.fs" />
     <Compile Include="Gen.fs" />
-    <Compile Include="CT.fs" />
+    <Compile Include="Partition.fs" />
     <Compile Include="MathNetUtils.fs" />
     <Compile Include="FuncTable.fs" />
     <Compile Include="Glauber.fs" />
+    <Compile Include="ColorSets.fs" />
     <Compile Include="Histogram.fs" />
     <Compile Include="CliqueE.fs" />
     <Compile Include="RingE.fs" />
@@ -81,6 +82,7 @@
     <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />

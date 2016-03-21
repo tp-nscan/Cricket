@@ -2,7 +2,6 @@
 open System
 open MathNet.Numerics
 open MathNet.Numerics.Distributions
-open MathNet.Numerics.LinearAlgebra
 open MathNet.Numerics.Random
 
 module GenV = 
@@ -138,9 +137,11 @@ module GenBT =
 
     let IofSeqChunk (values:seq<float32>) =
         values |> Seq.chunkBySize 2    
-               |> Seq.map(fun v -> {I.Min=v.[0]; Max=v.[1];})
+               |> Seq.map(fun v -> ( BT.RegularI v.[0] v.[1] ))
 
 
+    //Sequences that use this are typicaly ordered, so that assumption is
+    //neccessary to make intevals with Max>Min
     let IofSeqSlide (values:seq<float32>) =
         values |> Seq.windowed 2    
                |> Seq.map(fun v -> {I.Min=v.[0]; Max=v.[1];})
@@ -148,11 +149,8 @@ module GenBT =
 
     let RofSeq (values:seq<float32>) =
         values |> Seq.chunkBySize 4   
-               |> Seq.map(fun v -> {R.MinX=v.[0]; 
-                                      MaxX=v.[1];
-                                      MinY=v.[2]; 
-                                      MaxY=v.[3];
-                                      })
+               |> Seq.map(fun v -> (BT.RegularR v.[0] v.[1] v.[2] v.[3])
+                         )
 
 
     let ConsecIntervals (values:seq<float32>) =
@@ -163,6 +161,11 @@ module GenBT =
     let M2x2ofSeq (values:seq<float32>) =
         values |> Seq.chunkBySize 4
                |> Seq.map(fun v -> {M2x2.X1=v.[0]; X2=v.[1]; Y1=v.[2]; Y2=v.[3];})
+
+
+    let TestF32 (seed:int) (count:int) =
+         GenS.SeqOfRandSF32 (GenV.Twist seed)
+                |> Seq.take count
 
 
     let TestP2 (seed:int) (count:int) =
@@ -176,7 +179,7 @@ module GenBT =
 
 
     let TestI (seed:int) (count:int) =
-        IofSeqSlide (GenS.SeqOfRandSF32 (GenV.Twist seed)) 
+        IofSeqChunk (GenS.SeqOfRandSF32 (GenV.Twist seed)) 
                     |> Seq.take count
 
 
@@ -185,6 +188,6 @@ module GenBT =
                 |> Seq.take count
 
 
-    let TestL (seed:int) (count:int) =
+    let TestM2x2 (seed:int) (count:int) =
         M2x2ofSeq (GenS.SeqOfRandSF32 (GenV.Twist seed)) 
                 |> Seq.take count

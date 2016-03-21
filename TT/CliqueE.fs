@@ -5,7 +5,6 @@ open MathNet.Numerics.LinearAlgebra.Matrix
 open MathNet.Numerics.Random
 open BT
 open FuncTable
-open MathNetUt
 
 type CliqueBuildRandMemParams = {
     MemSize : int
@@ -152,7 +151,7 @@ module CliqueEbuilders =
 
     let CreateRandomMems (cliqueBuildRandMemParams:CliqueBuildRandMemParams) =
         let seq = (GenS.SeqOfRandBUF32 0.5f (GenV.Twist(cliqueBuildRandMemParams.RandSeed)))
-        MatrixFromSeq cliqueBuildRandMemParams.MemSize
+        MatrixUt.FromSeq cliqueBuildRandMemParams.MemSize
                 cliqueBuildRandMemParams.MemCount 
                 seq
 
@@ -161,7 +160,7 @@ module CliqueEbuilders =
         let perturbs = GenS.SeqOfUniformRandF32 -cliqueGroupReplicaParams.ReplicaDistance
                                                  cliqueGroupReplicaParams.ReplicaDistance
                                                 (GenV.Twist(cliqueGroupReplicaParams.RandSeed))
-        MutatedMatrixCopies
+        MatrixUt.MutatedCopies
             NumUt.ToSF
             (cliqueGroupReplicaParams.Memories.Column(0).ToColumnMatrix())
             cliqueGroupReplicaParams.ReplicaCount
@@ -172,7 +171,7 @@ module CliqueEbuilders =
         let perturbs = GenS.SeqOfUniformRandF32 -cliqueGroupReplicaParams.ReplicaDistance
                                                  cliqueGroupReplicaParams.ReplicaDistance
                                                 (GenV.Twist(cliqueGroupReplicaParams.RandSeed))
-        MutatedMatrixCopies
+        MatrixUt.MutatedCopies
             NumUt.ToSF
             cliqueGroupReplicaParams.Memories
             cliqueGroupReplicaParams.ReplicaCount
@@ -184,8 +183,8 @@ module CliqueEbuilders =
                                     .Multiply(createSynapseParams.Memories.Transpose())
         createSynapseParams.Memories
                            .Multiply(createSynapseParams.Memories.Transpose())
-                              |> SetUniformDiagonal 0.0f
-                              |> ClipFractionSF32 createSynapseParams.ClipFrac
+                              |> MatrixUt.ToUniformDiag 0.0f
+                              |> MatrixUt.ClipSF32 createSynapseParams.ClipFrac
 
 
 

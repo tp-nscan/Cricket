@@ -5,7 +5,6 @@ open MathNet.Numerics.LinearAlgebra.Matrix
 open MathNet.Numerics.Random
 open BT
 open FuncTable
-open MathNetUt
 
 type RingBuildRandMemParams = {
     MemSize : int
@@ -136,7 +135,7 @@ module RingEbuilders =
 
     let CreateRandomMems (ringBuildRandMemParams:RingBuildRandMemParams) =
         let seq = (GenS.SeqOfRandBUF32 0.5f (GenV.Twist(ringBuildRandMemParams.RandSeed)))
-        MatrixFromSeq ringBuildRandMemParams.MemSize
+        MatrixUt.FromSeq ringBuildRandMemParams.MemSize
                 ringBuildRandMemParams.MemCount 
                 seq
 
@@ -146,8 +145,8 @@ module RingEbuilders =
                     .Multiply(createSynapseParams.Memories.Transpose())
         createSynapseParams.Memories
                            .Multiply(createSynapseParams.Memories.Transpose())
-                  |> SetUniformDiagonal 0.0f
-                  |> ClipFractionSF32 createSynapseParams.ClipFrac
+                  |> MatrixUt.ToUniformDiag 0.0f
+                  |> MatrixUt.ClipSF32 createSynapseParams.ClipFrac
 
 
 

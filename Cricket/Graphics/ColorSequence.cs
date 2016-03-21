@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 
@@ -18,6 +19,34 @@ namespace Cricket.Graphics
     public interface IColorSequence2D : IColorSequence
     {
         int Width { get; }
+    }
+
+    public static class ColorFunc
+    {
+        public static Func<int, Color> WeatherChannel
+        {
+            get
+            {
+                return i =>
+                {
+                    if (i > 49) return Colors.DarkRed;
+                    if (i > 37) return Colors.Red;
+                    if (i > 28) return Colors.OrangeRed;
+                    if (i > 21) return Colors.Orange;
+                    if (i > 16) return Colors.Yellow;
+                    if (i > 12) return Colors.LightYellow;
+                    if (i > 9) return Colors.DarkGreen;
+                    if (i > 7) return Colors.Green;
+                    if (i > 5) return Colors.Chartreuse;
+                    if (i > 4) return Colors.DarkBlue;
+                    if (i > 3) return Colors.MediumBlue;
+                    if (i > 2) return Colors.DodgerBlue;
+                    if (i > 1) return Colors.SteelBlue;
+                    if (i > 0) return Colors.DarkSlateGray;
+                    return Colors.Transparent;
+                };
+            }
+        }
     }
 
     public static class ColorSequence

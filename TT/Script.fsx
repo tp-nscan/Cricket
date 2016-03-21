@@ -70,7 +70,25 @@ open MathNet.Numerics.Random
 #load "Gen.fs"
 open TT
 
-let k = GenBT.TestL 123 3 |> Seq.toArray
+GenBT.TestI 123 33 |> Seq.toArray
+
+//GenBT.TestR 123 33 |> Seq.toArray
+
+//let k = GenBT.TestM2x2 123 3 |> Seq.toArray
+
+//let k = GenBT.TestI 123 3333 
+//k |> BT.BoundingII BT.AntiIofS
+
+//let k = GenBT.TestF32 123 3333 
+//k |> BT.BoundingIP BT.AntiIofS
+
+let k = GenBT.TestR 123 3333 
+k |> BT.BoundingRR BT.AntiRofS
+
+
+
+
+
 
 //let a = GenS.NormalF32 (GenV.Twist 5) 0.5f 0.5f 
 //        |> Seq.take(10)
@@ -104,7 +122,7 @@ open MathNet.Numerics.LinearAlgebra
 open MathNet.Numerics.Random
 #load "BT.fs"
 #load "Gen.fs"
-#load "CT.fs"
+#load "Partition.fs"
 #load "MathNetUtils.fs"
 
 open TT
@@ -116,3 +134,34 @@ let sq =  seq {0.0f .. 10000000.0f }
 
 
 //let mutable res = sq |> SeqUt.SeqToI |> Seq.take(100) |> Seq.toArray
+
+
+
+#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll"
+#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.FSharp.3.7.0\lib\net40\MathNet.Numerics.FSharp.dll"
+#r @"C:\Users\tpnsc_000\Documents\GitHub\HopAlong\Utils\bin\Debug\Utils.dll"
+#r @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\PresentationCore.dll"
+
+open System
+open System.Windows.Media
+open MathNet.Numerics
+open MathNet.Numerics.Distributions
+open MathNet.Numerics.Random
+#load "BT.fs"
+#load "Gen.fs"
+#load "MathNetUtils.fs"
+#load "Partition.fs"
+#load "ColorSets.fs"
+
+open TT
+
+ColorSets.ByteInterp 220uy 120uy 256 66
+
+let q = GenSteps.UniformUbMap 150 0.5f
+
+
+let st = GenSteps.ExpStepSeq 7.0 14.0 |> Seq.take 14  |> Seq.toArray
+
+let std = st |> Array.map(fun x-> x - 0.1)
+
+let stB = st |> Array.map(fun x-> GenSteps.InvExpStepOne(x))

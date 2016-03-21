@@ -10,58 +10,60 @@ open GenV
 open GenS
 open GenBT
 
-module MathNetUt =
+module VecUt =
 
     // given the length, and a sequence of values, a dense vector is produced
-    let VectorFromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
+    let FromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
                  length (mVals:seq<'a>) =
         let chunk = mVals |> Seq.take length |> Seq.toArray
         DenseVector.init length (fun x  -> chunk.[x])
 
 
     // given the length, and a sequence of values, a dense vector is produced
-    let MutatedVector<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
+    let Mutate<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
                  (vector:Vector<float32>) (perturbs:seq<float32>) (pp:(float32->float32))  =
         let chunk = perturbs |> Seq.take vector.Count |> Seq.toArray
         DenseVector.init vector.Count (fun x  -> pp(vector.Item(x) + chunk.[x]))
 
 
-    // given the size of the square matrix, and a sequence of values, a 2d
-    // matrix is produced
-    let MatrixFromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
-                 rows cols (mVals:seq<'a>) =
-        let chunk = mVals |> Seq.take (rows*cols) |> Seq.toArray
-        DenseMatrix.init rows cols (fun x y -> chunk.[x*cols + y])
-
-
-    let ToRowMajorSequence (mnMatrix:Matrix<'a>) = 
-         mnMatrix.ToArray() |> Seq.cast<'a>
-
-
-    let SetUniformDiagonal (diagVal:'a) (matrix:Matrix<'a>) = 
-        DenseMatrix.init matrix.RowCount matrix.ColumnCount 
-                    (fun x y -> if (x=y) then diagVal
-                                else matrix.[x,y])
-
-
-    let VectorRotate (steps:int) (vec:Vector<'a>) =
+    let Rotate (steps:int) (vec:Vector<'a>) =
         let mI = vec.Count
         DenseVector.init mI (fun i ->vec.[(i+steps)%mI])
 
 
-    let FormatVector (numFormat:string) (vector:Vector<float32>)  =
+    let Format (numFormat:string) (vector:Vector<float32>)  =
         vector.Enumerate()
             |> Seq.fold(fun acc v -> acc + v.ToString("0.000") + "\t") 
                         String.Empty
 
 
-    let FormatMatrix (numFormat:string) (matrix:Matrix<float32>) =
+module MatrixUt =
+
+    // given the size of the square matrix, and a sequence of values, a 2d
+    // matrix is produced
+    let FromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
+                 rows cols (mVals:seq<'a>) =
+        let chunk = mVals |> Seq.take (rows*cols) |> Seq.toArray
+        DenseMatrix.init rows cols (fun x y -> chunk.[x*cols + y])
+
+
+    let ToRowMajorSequence (matrix:Matrix<'a>) = 
+         matrix.ToArray() |> Seq.cast<'a>
+
+
+    let ToUniformDiag (diagVal:'a) (matrix:Matrix<'a>) = 
+        DenseMatrix.init matrix.RowCount matrix.ColumnCount 
+                    (fun x y -> if (x=y) then diagVal
+                                else matrix.[x,y])
+
+
+    let Format (numFormat:string) (matrix:Matrix<float32>) =
         matrix.EnumerateRows() 
-            |> Seq.fold(fun acc v -> acc + (v |> FormatVector numFormat) + "\n") 
+            |> Seq.fold(fun acc v -> acc + (v |> VecUt.Format numFormat) + "\n") 
                         String.Empty
 
 
-    let ClipFractionSF32 (frac:float32) (matrix:Matrix<float32>) =
+    let ClipSF32 (frac:float32) (matrix:Matrix<float32>) =
         let sA = matrix |> ToRowMajorSequence
                         |> Seq.map(fun v -> Math.Abs(v))
                         |> Seq.toArray 
@@ -71,8 +73,8 @@ module MathNetUt =
                     (fun x y -> NumUt.ToUF(matrix.[x,y] / bubble))
 
 
-    let MutatedMatrixCopies (pp:(float32->float32)) (matrix:Matrix<float32>)
-                      (copies:int) (perturbs:seq<float32>) =
+    let MutatedCopies (pp:(float32->float32)) (matrix:Matrix<float32>)
+                            (copies:int) (perturbs:seq<float32>) =
         let ncc = matrix.ColumnCount * copies
         let chunk = perturbs |> Seq.take (matrix.RowCount * ncc) 
                              |> Seq.toArray
@@ -82,7 +84,7 @@ module MathNetUt =
 
     let MutateCopiesSF (matrix:Matrix<float32>) (copies:int) 
                        (perturbs:seq<float32>) =
-        MutatedMatrixCopies NumUt.ToSF matrix copies perturbs
+        MutatedCopies NumUt.ToSF matrix copies perturbs
         
 
     let ToP2V (m:Matrix<float32>) =
