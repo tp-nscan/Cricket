@@ -136,10 +136,8 @@ let sq =  seq {0.0f .. 10000000.0f }
 //let mutable res = sq |> SeqUt.SeqToI |> Seq.take(100) |> Seq.toArray
 
 
-
-#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll"
-#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.FSharp.3.7.0\lib\net40\MathNet.Numerics.FSharp.dll"
-#r @"C:\Users\tpnsc_000\Documents\GitHub\HopAlong\Utils\bin\Debug\Utils.dll"
+#r @"..\packages\MathNet.Numerics.3.11.0\lib\net40\MathNet.Numerics.dll"
+#r @"..\packages\MathNet.Numerics.FSharp.3.11.0\lib\net40\MathNet.Numerics.FSharp.dll"
 #r @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\PresentationCore.dll"
 
 open System
@@ -155,10 +153,15 @@ open MathNet.Numerics.Random
 
 open TT
 
-ColorSets.ByteInterp 220uy 120uy 256 66
+ColorSets.ColStr Colors.Red
+
+ColorSets.TriColor 1 Colors.Black Colors.White Colors.Red |> Seq.toArray |> Array.map(fun c -> ColorSets.ColStr c)
+
+ColorSets.ColorSpan 1 Colors.Black Colors.White |> Seq.toArray |> Array.map(fun c -> ColorSets.ColStr c)
+
+ColorSets.ByteInterp 220uy 120uy 256 128
 
 let q = GenSteps.UniformUbMap 150 0.5f
-
 
 let st = GenSteps.ExpStepSeq 7.0 14.0 |> Seq.take 14  |> Seq.toArray
 

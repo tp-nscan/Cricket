@@ -29,10 +29,11 @@ namespace Cricket.Graphics
 
         public static IZ1BrushSequence DualBrushes(Color positiveColor, Color negativeColor, int steps)
         {
-            return new Z1BrushSequence(
-                positiveBrushes: positiveColor.FadingSpread(steps + 1).ToBrushes(),
-                negativeBrushes: negativeColor.FadingSpread(steps + 1).ToBrushes()
-            );
+            return null;
+            //new Z1BrushSequence(
+            //    positiveBrushes: positiveColor.FadingSpread(steps + 1).ToBrushes(),
+            //    negativeBrushes: negativeColor.FadingSpread(steps + 1).ToBrushes()
+            //);
         }
 
         public static IZ1BrushSequence RedBlueBrushSequence(int steps)

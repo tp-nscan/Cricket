@@ -53,10 +53,11 @@ namespace Cricket.Graphics
     {
         public static IColorSequence Dipolar(Color negativeColor, Color positiveColor, int halfStepCount)
         {
-            return new Ir1ColorSequence(
-                    new ColorSequenceImpl(positiveColor.LessFadingSpread(halfStepCount)),
-                    new ColorSequenceImpl(negativeColor.LessFadingSpread(halfStepCount))
-                );
+            return null;
+            //new Ir1ColorSequence(
+            //        new ColorSequenceImpl(positiveColor.LessFadingSpread(halfStepCount)),
+            //        new ColorSequenceImpl(negativeColor.LessFadingSpread(halfStepCount))
+            //    );
         }
 
         public static IColorSequence Quadrupolar(
@@ -66,13 +67,14 @@ namespace Cricket.Graphics
             Color color4,
             int quarterStepCount)
         {
-            return new ColorSequenceImpl
-                (
-                    ColorEx.UniformSpread(color1, color2, quarterStepCount)
-                        .Concat(ColorEx.UniformSpread(color2, color3, quarterStepCount))
-                        .Concat(ColorEx.UniformSpread(color3, color4, quarterStepCount))
-                        .Concat(ColorEx.UniformSpread(color4, color1, quarterStepCount))
-                );
+            return null;
+            //; new ColorSequenceImpl
+            //    (
+            //        ColorEx.UniformSpread(color1, color2, quarterStepCount)
+            //            .Concat(ColorEx.UniformSpread(color2, color3, quarterStepCount))
+            //            .Concat(ColorEx.UniformSpread(color3, color4, quarterStepCount))
+            //            .Concat(ColorEx.UniformSpread(color4, color1, quarterStepCount))
+            //    );
         }
 
         public static IColorSequence2D TriPolar(int width)
@@ -115,7 +117,7 @@ namespace Cricket.Graphics
 
         public static IColorSequence ToUniformColorSequence(this Color maxColor, int steps)
         {
-            return new ColorSequenceImpl(maxColor.FadingSpread(steps));
+            return null; // new ColorSequenceImpl(maxColor.FadingSpread(steps));
         }
 
     }

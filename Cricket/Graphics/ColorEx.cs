@@ -22,21 +22,6 @@ namespace Cricket.Graphics
             return c.A << 24 | (c.R << 16) | (c.G << 8) | c.B;
         }
 
-        public static IEnumerable<Color> UniformSpread(Color lowColor, Color hiColor, int stepCount)
-        {
-            yield break;
-        //    return Enumerable.Range(0, stepCount).Select
-        //        (
-        //            i => new Color
-        //            {
-        //                A = (byte) RealIntervalExt.TicAtIndex(lowColor.A, hiColor.A, i, stepCount + 1),
-        //                R = (byte) RealIntervalExt.TicAtIndex(lowColor.R, hiColor.R, i, stepCount + 1),
-        //                G = (byte) RealIntervalExt.TicAtIndex(lowColor.G, hiColor.G, i, stepCount + 1),
-        //                B = (byte) RealIntervalExt.TicAtIndex(lowColor.B, hiColor.B, i, stepCount + 1)
-        //            }
-        //        );
-        }
-
         public static IEnumerable<Color> Z2(int width)
         {
             float w2 = width*width;
@@ -68,36 +53,6 @@ namespace Cricket.Graphics
                     }
 
                 );
-        }
-
-        public static IEnumerable<Color> FadingSpread(this Color color, int stepCount)
-        {
-            yield break;
-            //    return Enumerable.Range(0, stepCount).Select
-            //        (
-            //            i => new Color
-            //            {
-            //                A = (byte) RealIntervalExt.TicAtIndex(0, color.A, i, stepCount + 1),
-            //                R = color.R,
-            //                G = color.G,
-            //                B = color.B
-            //            }
-            //        );
-        }
-
-        public static IEnumerable<Color> LessFadingSpread(this Color color, int stepCount)
-        {
-            yield break;
-            //return Enumerable.Range(0, stepCount).Select
-            //    (
-            //        i => new Color
-            //        {
-            //            A = (byte)RealIntervalExt.TicAtIndex(0, color.A, (int)(Math.Pow((double)i / stepCount, 0.7) * stepCount), stepCount + 1),
-            //            R = color.R,
-            //            G = color.G,
-            //            B = color.B
-            //        }
-            //    );
         }
 
     }
