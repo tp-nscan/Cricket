@@ -55,35 +55,35 @@
 //for i in 0 .. 100000000 do
 //    res <- BT.StretchRP rect pt
 
+//
+//#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll"
+//#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.FSharp.3.7.0\lib\net40\MathNet.Numerics.FSharp.dll"
+//#r @"C:\Users\tpnsc_000\Documents\GitHub\HopAlong\Utils\bin\Debug\Utils.dll"
+//
+//open System
+//open MathNet.Numerics
+//open MathNet.Numerics.Distributions
+//open MathNet.Numerics.LinearAlgebra
+//open MathNet.Numerics.Random
+//
+//#load "BT.fs"
+//#load "Gen.fs"
+//open TT
+//
+//BTmap.TestI 123 33 |> Seq.toArray
 
-#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll"
-#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.FSharp.3.7.0\lib\net40\MathNet.Numerics.FSharp.dll"
-#r @"C:\Users\tpnsc_000\Documents\GitHub\HopAlong\Utils\bin\Debug\Utils.dll"
+//BTmap.TestR 123 33 |> Seq.toArray
 
-open System
-open MathNet.Numerics
-open MathNet.Numerics.Distributions
-open MathNet.Numerics.LinearAlgebra
-open MathNet.Numerics.Random
+//let k = BTmap.TestLS2 123 3 |> Seq.toArray
 
-#load "BT.fs"
-#load "Gen.fs"
-open TT
-
-GenBT.TestI 123 33 |> Seq.toArray
-
-//GenBT.TestR 123 33 |> Seq.toArray
-
-//let k = GenBT.TestM2x2 123 3 |> Seq.toArray
-
-//let k = GenBT.TestI 123 3333 
+//let k = BTmap.TestI 123 3333 
 //k |> BT.BoundingII BT.AntiIofS
 
-//let k = GenBT.TestF32 123 3333 
+//let k = BTmap.TestF32 123 3333 
 //k |> BT.BoundingIP BT.AntiIofS
 
-let k = GenBT.TestR 123 3333 
-k |> BT.BoundingRR BT.AntiRofS
+//let k = BTmap.TestR 123 3333 
+//k |> BT.BoundingRR BT.AntiRofF32
 
 
 
@@ -111,26 +111,26 @@ k |> BT.BoundingRR BT.AntiRofS
 //let k = CT.TicMarks jj 22 |> Seq.toArray
 
 
-#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll"
-#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.FSharp.3.7.0\lib\net40\MathNet.Numerics.FSharp.dll"
-#r @"C:\Users\tpnsc_000\Documents\GitHub\HopAlong\Utils\bin\Debug\Utils.dll"
-
-open System
-open MathNet.Numerics
-open MathNet.Numerics.Distributions
-open MathNet.Numerics.LinearAlgebra
-open MathNet.Numerics.Random
-#load "BT.fs"
-#load "Gen.fs"
-#load "Partition.fs"
-#load "MathNetUtils.fs"
-
-open TT
-
-let res = CT.TileInterval {I.Min=1.0f; Max=3.7f } 4 |> Seq.toArray
-
-let sq =  seq {0.0f .. 10000000.0f }
-//let res = sq |> GenBT.IofSeq |> Seq.take(100) |> Seq.toArray
+//#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll"
+//#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.FSharp.3.7.0\lib\net40\MathNet.Numerics.FSharp.dll"
+//#r @"C:\Users\tpnsc_000\Documents\GitHub\HopAlong\Utils\bin\Debug\Utils.dll"
+//
+//open System
+//open MathNet.Numerics
+//open MathNet.Numerics.Distributions
+//open MathNet.Numerics.LinearAlgebra
+//open MathNet.Numerics.Random
+//#load "BT.fs"
+//#load "Gen.fs"
+//#load "Partition.fs"
+//#load "MathNetUtils.fs"
+//
+//open TT
+//
+//let res = CT.TileInterval {I.Min=1.0f; Max=3.7f } 4 |> Seq.toArray
+//
+//let sq =  seq {0.0f .. 10000000.0f }
+//let res = sq |> BTmap.IofSeq |> Seq.take(100) |> Seq.toArray
 
 
 //let mutable res = sq |> SeqUt.SeqToI |> Seq.take(100) |> Seq.toArray
@@ -155,16 +155,77 @@ open TT
 
 ColorSets.ColStr Colors.Red
 
-ColorSets.TriColor 1 Colors.Black Colors.White Colors.Red |> Seq.toArray |> Array.map(fun c -> ColorSets.ColStr c)
+ColorSets.QuadColorRing 2 Colors.Black Colors.White Colors.Red Colors.Blue |> Seq.toArray |> Array.map(fun c -> ColorSets.ColStr c)
 
-ColorSets.ColorSpan 1 Colors.Black Colors.White |> Seq.toArray |> Array.map(fun c -> ColorSets.ColStr c)
+//
+//ColorSets.ColorSpan 1 Colors.Black Colors.White |> Seq.toArray |> Array.map(fun c -> ColorSets.ColStr c)
+//
+//ColorSets.ByteInterp 220uy 120uy 256 128
+//
+//let q = GenSteps.UniformUbMap 150 0.5f
+//
+//let st = GenSteps.ExpStepSeq 7.0 14.0 |> Seq.take 14  |> Seq.toArray
+//
+//let std = st |> Array.map(fun x-> x - 0.1)
+//
+//let stB = st |> Array.map(fun x-> GenSteps.InvExpStepOne(x))
+//
+//
+//let tf a =
+//    let la = Math.Log a
+//    Seq.initInfinite(fun x -> Math.Exp (la * (float x)))
+//    |> Seq.take(20) |> Seq.toArray
+//    
+//// er 1.8
+//let er a =
+//    let la = Math.Log a
+//    Seq.initInfinite(fun x -> Math.Exp (la * Math.Pow( (float x), 0.85 )))
+//    |> Seq.take(14) |> Seq.toArray
 
-ColorSets.ByteInterp 220uy 120uy 256 128
 
-let q = GenSteps.UniformUbMap 150 0.5f
+#r @"..\packages\MathNet.Numerics.3.11.0\lib\net40\MathNet.Numerics.dll"
+#r @"..\packages\MathNet.Numerics.FSharp.3.11.0\lib\net40\MathNet.Numerics.FSharp.dll"
+#r @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\PresentationCore.dll"
 
-let st = GenSteps.ExpStepSeq 7.0 14.0 |> Seq.take 14  |> Seq.toArray
+#load "BT.fs"
+#load "BTmap.fs"
+#load "Gen.fs"
 
-let std = st |> Array.map(fun x-> x - 0.1)
+open TT
 
-let stB = st |> Array.map(fun x-> GenSteps.InvExpStepOne(x))
+open System
+open MathNet.Numerics
+open MathNet.Numerics.Distributions
+open MathNet.Numerics.Random
+
+let gg = GenV.Twist 3
+let mappy = F32toF32.BinOfA F32toF32.Step14FromOneTo180
+let mutable res = 3
+#time
+for i in 0 .. 1000000 do
+    res <- mappy (gg.Next() % 400)
+
+
+
+#r @"..\packages\MathNet.Numerics.3.11.0\lib\net40\MathNet.Numerics.dll"
+#r @"..\packages\MathNet.Numerics.FSharp.3.11.0\lib\net40\MathNet.Numerics.FSharp.dll"
+#r @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\PresentationCore.dll"
+
+#load "BT.fs"
+#load "BTmap.fs"
+#load "Gen.fs"
+
+open TT
+
+open System
+open MathNet.Numerics
+open MathNet.Numerics.Distributions
+open MathNet.Numerics.Random
+
+let gg = GenV.Twist 3
+let mappy = F32toF32.BinOfL F32toF32.Step14FromOneTo180L
+let mutable res = 3
+#time
+for i in 0 .. 1000000 do
+    res <- mappy (gg.Next() % 400)
+

@@ -64,7 +64,7 @@ module Grid2dCnxn =
                         (stride:int) (x:int) (y:int) =
         (offsets valuator) |> Array.map( 
             fun p -> { 
-                      M2x2V.X1 = x; 
+                      LS2V.X1 = x; 
                             Y1 = y; 
                             X2 = (p.X + x + stride) % stride; 
                             Y2 = (p.Y + y + stride) % stride;
@@ -103,17 +103,17 @@ module Grid2dCnxn =
         }
 
 
-    let Cnx4dToCnx2d (stride:int) (coords:seq<M2x2<int>>) =
+    let Cnx4dToCnx2d (stride:int) (coords:seq<LS2<int>>) =
         coords |> Seq.map(fun d4->{P2.X = d4.Y1*stride + d4.X1; 
                                       Y = d4.Y2*stride + d4.X2})
 
 
-    let Z4VTo3Tuple (stride:int) (coords:seq<M2x2V<int,float32>>) =
+    let Z4VTo3Tuple (stride:int) (coords:seq<LS2V<int,float32>>) =
         coords |> Seq.map(fun z4V-> 
             (z4V.Y1*stride + z4V.X1, z4V.Y2*stride + z4V.X2, z4V.V))
 
     
-    let CnxZ4To3Tuple (stride:int) (coords:seq<M2x2V<int, float32>>) =
+    let CnxZ4To3Tuple (stride:int) (coords:seq<LS2V<int, float32>>) =
         coords |> Seq.map(fun z4-> 
             (z4.Y1*stride + z4.X1, z4.Y2*stride + z4.X2, z4.V))
 
@@ -123,7 +123,7 @@ module Grid2dCnxn =
             let ax1 = Coordify stride t.Item1
             let ax2 = Coordify stride t.Item2
             {
-                M2x2V.X1  = ax1.X; 
+                LS2V.X1  = ax1.X; 
                       X2  = ax1.Y; 
                       Y1  = ax2.X;
                       Y2  = ax2.Y;

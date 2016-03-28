@@ -5,14 +5,14 @@ type Sz2<'c>  = { X:'c; Y:'c }
 type P3<'c>  = { X:'c; Y:'c; Z:'c }
 type I<'c>  = { Min:'c; Max:'c }
 type R<'c>  = { MinX:'c; MaxX:'c; MinY:'c; MaxY:'c } 
-type M2x2<'c>  = { X1:'c; Y1:'c; X2:'c; Y2:'c } 
+type LS2<'c>  = { X1:'c; Y1:'c; X2:'c; Y2:'c } 
 
 type P1V<'c,'v>  = { X:'c; V:'v }
 type P2V<'c,'v>  = { X:'c; Y:'c; V:'v }
 type P3V<'c,'v>  = { X:'c; Y:'c; Z:'c; V:'v }
 type IV<'c,'v>  = { Min:'c; Max:'c; V:'v  } 
 type RV<'c,'v>  = { MinX:'c; MaxX:'c; MinY:'c; MaxY:'c; V:'v } 
-type M2x2V<'c,'v>  = { X1:'c; Y1:'c; X2:'c; Y2:'c; V:'v } 
+type LS2V<'c,'v>  = { X1:'c; Y1:'c; X2:'c; Y2:'c; V:'v } 
 
 module NumUt =
 
@@ -89,7 +89,7 @@ module BT =
             Max = System.Int32.MinValue;
         }
 
-    let AntiRofS = 
+    let AntiRofF32 = 
         { 
             R.MinX = System.Single.PositiveInfinity; 
             R.MaxX = System.Single.NegativeInfinity; 
@@ -239,7 +239,7 @@ module BT =
             rects |> Seq.fold (fun acc elem -> StretchRR acc elem ) box
 
 
-    let inline BoundingRM2x2 (box:R< ^b>) 
+    let inline BoundingRLS2 (box:R< ^b>) 
                             (lines:seq< ^c> when ^c:(member X1 : ^b) and ^c:(member X2 : ^b) 
                                              and ^c:(member Y1 : ^b) and ^c:(member Y2 : ^b)) =
             lines |> Seq.fold (fun acc elem -> StretchRL acc elem ) box

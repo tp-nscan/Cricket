@@ -53,12 +53,14 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Rop.fs" />
     <Compile Include="BT.fs" />
+    <Compile Include="BTmap.fs" />
     <Compile Include="Gen.fs" />
     <Compile Include="Partition.fs" />
     <Compile Include="MathNetUtils.fs" />
     <Compile Include="FuncTable.fs" />
     <Compile Include="Glauber.fs" />
     <Compile Include="ColorSets.fs" />
+    <Compile Include="ImageData.fs" />
     <Compile Include="Histogram.fs" />
     <Compile Include="CliqueE.fs" />
     <Compile Include="RingE.fs" />
@@ -66,6 +68,7 @@
     <Compile Include="ConfigVm.fs" />
     <Compile Include="IntegerZ5.fs" />
     <Compile Include="Sim.fs" />
+    <Compile Include="DesignData.fs" />
     <Content Include="packages.config" />
     <None Include="Script.fsx" />
   </ItemGroup>
@@ -87,6 +90,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

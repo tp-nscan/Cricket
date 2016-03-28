@@ -8,7 +8,7 @@ open MathNet.Numerics.LinearAlgebra.Matrix
 open BT
 open GenV
 open GenS
-open GenBT
+open BTmap
 
 module VecUt =
 
@@ -103,13 +103,13 @@ module MatrixUt =
             }
 
 
-    let ToM2x2V (m:Matrix<float32>) =
+    let ToLS2V (m:Matrix<float32>) =
         let sd = Convert.ToInt32(Math.Sqrt (Convert.ToDouble(m.RowCount)))
         seq { for row1 in 0 .. sd - 1 do
                 for col1 in 0 .. sd - 1 do
                   for row2 in 0 .. sd - 1 do
                     for col2 in 0 .. sd - 1 do
-                      yield {M2x2V.X1 = row1; 
+                      yield {LS2V.X1 = row1; 
                                    Y1 = col1; 
                                    X2 = row2; 
                                    Y2 = col2; 

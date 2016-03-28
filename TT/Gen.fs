@@ -123,7 +123,7 @@ module GenS =
 
 
 
-module GenBT =
+module BTmap =
 
     let P2ofSeq (values:seq<float32>) =
         values |> Seq.chunkBySize 2     
@@ -158,9 +158,9 @@ module GenBT =
         values |> Seq.head
 
 
-    let M2x2ofSeq (values:seq<float32>) =
+    let LS2ofSeq (values:seq<float32>) =
         values |> Seq.chunkBySize 4
-               |> Seq.map(fun v -> {M2x2.X1=v.[0]; X2=v.[1]; Y1=v.[2]; Y2=v.[3];})
+               |> Seq.map(fun v -> {LS2.X1=v.[0]; X2=v.[1]; Y1=v.[2]; Y2=v.[3];})
 
 
     let TestF32 (seed:int) (count:int) =
@@ -188,6 +188,6 @@ module GenBT =
                 |> Seq.take count
 
 
-    let TestM2x2 (seed:int) (count:int) =
-        M2x2ofSeq (GenS.SeqOfRandSF32 (GenV.Twist seed)) 
+    let TestLS2 (seed:int) (count:int) =
+        LS2ofSeq (GenS.SeqOfRandSF32 (GenV.Twist seed)) 
                 |> Seq.take count

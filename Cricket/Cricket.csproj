@@ -41,7 +41,25 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -53,6 +71,10 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WriteableBitmapEx.Wpf, Version=1.5.0.0, Culture=neutral, PublicKeyToken=50375ca6144f1c69, processorArchitecture=MSIL">
+      <HintPath>..\packages\WriteableBitmapEx.1.5.0.0\lib\net40\WriteableBitmapEx.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -63,6 +85,24 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\EnumerExt.cs" />
+    <Compile Include="ViewModel\Core\GraphVm.cs" />
+    <Compile Include="ViewModel\Core\Grid2DVm.cs" />
+    <Compile Include="ViewModel\Core\Grid4DVm.cs" />
+    <Compile Include="ViewModel\Core\GroupSelectorVm.cs" />
+    <Compile Include="ViewModel\Core\Hist1dVm.cs" />
+    <Compile Include="ViewModel\Core\Hist2DVm.cs" />
+    <Compile Include="ViewModel\Core\ItemSelectorVm.cs" />
+    <Compile Include="ViewModel\Core\ProjectionControlVm.cs" />
+    <Compile Include="ViewModel\Core\WbImageData.cs" />
+    <Compile Include="ViewModel\Core\WbImageVm.cs" />
+    <Compile Include="ViewModel\Design\Core\GraphVmD.cs" />
+    <Compile Include="ViewModel\Design\Core\Grid2DVmD.cs" />
+    <Compile Include="ViewModel\Design\Core\Grid4DVmD.cs" />
+    <Compile Include="ViewModel\Design\Core\GroupSelectorVmD.cs" />
+    <Compile Include="ViewModel\Design\Core\HIst1DVmD.cs" />
+    <Compile Include="ViewModel\Design\Core\Hist2DVmD.cs" />
+    <Compile Include="ViewModel\Design\Core\ProjectionControlVmD.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -76,45 +116,86 @@
     <Compile Include="Graphics\ColorMap.cs" />
     <Compile Include="Graphics\ColorSequence.cs" />
     <Compile Include="Graphics\EnumerableExt.cs" />
-    <Compile Include="Graphics\RealIntervalExt.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\Sandbox.xaml">
+    <Page Include="View\Common\GraphControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Common\Grid2DControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Common\Grid4DControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Common\GroupSelectorControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Common\ProjectionControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Common\WbImage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Pages\Sandbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Settings\About.xaml">
+    <Page Include="View\Pages\Settings\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="Pages\Sandbox.xaml.cs">
+    <Compile Include="View\Common\GraphControl.xaml.cs">
+      <DependentUpon>GraphControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Common\Grid2DControl.xaml.cs">
+      <DependentUpon>Grid2DControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Common\Grid4DControl.xaml.cs">
+      <DependentUpon>Grid4DControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Common\GroupSelectorControl.xaml.cs">
+      <DependentUpon>GroupSelectorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Common\ProjectionControl.xaml.cs">
+      <DependentUpon>ProjectionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Common\WbImage.xaml.cs">
+      <DependentUpon>WbImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\Sandbox.xaml.cs">
       <DependentUpon>Sandbox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings\About.xaml.cs">
+    <Compile Include="View\Pages\Settings\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Page Include="Pages\Settings\Appearance.xaml">
+    <Page Include="View\Pages\Settings\Appearance.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="Pages\Settings\Appearance.xaml.cs">
+    <Compile Include="View\Pages\Settings\Appearance.xaml.cs">
       <DependentUpon>Appearance.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings\AppearanceViewModel.cs" />
-    <Page Include="Pages\Home.xaml">
+    <Compile Include="View\Pages\Settings\AppearanceViewModel.cs" />
+    <Page Include="View\Pages\Home.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SettingsPage.xaml">
+    <Page Include="View\Pages\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="Pages\Home.xaml.cs">
+    <Compile Include="View\Pages\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SettingsPage.xaml.cs">
+    <Compile Include="View\Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -128,6 +209,7 @@
       <Name>TT</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

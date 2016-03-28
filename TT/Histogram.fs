@@ -56,7 +56,7 @@ module Histogram =
 
     let Histogram1d (min:float32) (max:float32) (binCount:int) (vals:seq<float32>) =
             let bins = Bin1dSetMaker min max binCount
-            let scale = System.Convert.ToSingle(binCount)/(max-min)
+            let scale = (float32 binCount)/(max-min)
             let keyMaker = Binkey min scale
             let loader = BinLoader1d keyMaker binCount
             Seq.fold ( fun acc value -> loader value acc ) bins vals
@@ -64,8 +64,8 @@ module Histogram =
 
     let Histogram2d (bounds:R<float32>) (binCount:Sz2<int>) (vals:seq<P2<float32>>) =
             let bins = Bin2dSetMaker bounds binCount
-            let scaleX = System.Convert.ToSingle(binCount.X)/(BT.SpanX bounds)
-            let scaleY = System.Convert.ToSingle(binCount.Y)/(BT.SpanY bounds)
+            let scaleX = (float32 binCount.X)/(BT.SpanX bounds)
+            let scaleY = (float32 binCount.Y)/(BT.SpanY bounds)
             let keyMakerX = Binkey bounds.MinX scaleX
             let keyMakerY = Binkey bounds.MinY scaleY
             let loader = BinLoader2d keyMakerX binCount.X keyMakerY binCount.Y

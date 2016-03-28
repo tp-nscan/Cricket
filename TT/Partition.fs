@@ -7,6 +7,7 @@ module GenSteps =
     //Used to make the WC legends
 
     let ExpStepSeq (div:float) (ofBase:float) =
+        
         Seq.initInfinite(fun x -> Math.Pow(ofBase, (float x+1.0) / div))
 
     let ExpStepTicsOne = ExpStepSeq 7.0 14.0 |> Seq.take(14) |> Seq.toArray
@@ -51,31 +52,31 @@ module GenSteps =
 
 module CT =
 
-    let Mid (span:I<float32>) =
-        (span.Max - span.Min) / 2.0f
+    let TicMarks (interval:I<float32>) (segs:int) =
+        let midge = (BT.Span interval) / (float32 segs)
+        let tock tic = interval.Min + midge * (float32 tic)
+        seq {0 .. segs} |> Seq.map(fun s -> tock s)
 
 
-    let TicMarks (interval:I<float32>) (segments:int) =
-        let midge = (BT.Span interval) / (float32 segments)
-        let tock tic =
-            interval.Min + midge * (float32 tic)
-        seq {0 .. segments} |> Seq.map(fun s -> tock s)
+    let TicMarks2d (region:R<float32>) (segs:Sz2<int>) =
+        let midgeX = (BT.SpanX region) / (float32 segs.X)
+        let tockX tic = region.MinX + midgeX * (float32 tic)
+        let midgeY = (BT.SpanY region) / (float32 segs.Y)
+        let tockY tic = region.MinY + midgeY * (float32 tic)
+        seq { for row in 0 .. segs.Y do
+                for col in 0 .. segs.X do
+                    yield {P2.X = tockX col; Y= tockY row;}
+            }
 
 
     let TileInterval (inter:I<float32>) (tileCount:int) =
-        (TicMarks inter tileCount) |> GenBT.IofSeqSlide
+        (TicMarks inter tileCount) |> BTmap.IofSeqSlide
         
 
-//    let inline MinMaxUnion (values: seq< ^a> when ^a:(member Min:float32) 
-//                                    and ^a:(member Max:float32)) =
-//        let lstMin = values |> Seq.map(fun v-> (^a : (member Min : float32) v))
-//                            |> Seq.toList
-//        let lstMax = values |> Seq.map(fun v-> (^a : (member Max : float32) v))
-//                            |> Seq.toList
-//        { 
-//            I.Min = lstMin |> List.min;
-//            I.Max = lstMax |> List.max;
-//        }
-
+    let Raster2d (strides:Sz2<int>) =
+        seq { for col in 0 .. strides.X - 1 do
+                for row in 0 .. strides.Y - 1 do
+                    yield {P2.X= col; Y= row;}
+            }
         
 

@@ -2,10 +2,13 @@
 open System
 open System.Windows.Media
 
-type LegendMap1d<'a> = 
+type ColorMap<'a> = 
     { minC:Color; maxC:Color; spanC:Color[]; mapper:'a->int; minV:'a; maxV:'a;
       tics: 'a[] }
 
+type BrushMap<'a> = 
+    { minB:Brush; maxB:Brush; spanB:SolidColorBrush[]; mapper:'a->int; minV:'a; maxV:'a;
+      tics: 'a[] }
 
 module ColorSets =
     
@@ -18,9 +21,10 @@ module ColorSets =
         |]
 
 
-    let ColorFade (stepCount:int) (refColor:Color) =
+    let ColorFade (stepCount:int) (refCol:Color) =
         let bite ob = (byte (ob * 255 / stepCount))
-        {0 .. stepCount-1} |> Seq.map(fun st -> Color.FromArgb(bite st, refColor.R, refColor.G, refColor.B))
+        {0 .. stepCount-1} 
+            |> Seq.map(fun st -> Color.FromArgb(bite st, refCol.R, refCol.G, refCol.B))
 
 
     let ByteInterp (bL:byte) (bR:byte) (stepMax:int) (step:int) =
@@ -41,34 +45,34 @@ module ColorSets =
 
     let TriColorStrip (interStep:int) (colorA:Color) (colorB:Color) (colorC:Color) =
         let btwStp = ColorSpan interStep
-        [| colorC |] 
-            |> Array.append (btwStp colorB colorC |> Seq.toArray)
-            |> Array.append [| colorB |] 
-            |> Array.append (btwStp colorA colorB |> Seq.toArray)
-            |> Array.append [| colorA |]
+        seq { yield colorC } 
+            |> Seq.append(btwStp colorB colorC)
+            |> Seq.append(seq { yield colorB })
+            |> Seq.append(btwStp colorA colorB)
+            |> Seq.append(seq { yield colorA })
 
     
     let TriColorRing (interStep:int) (colorA:Color) (colorB:Color) (colorC:Color) =
         let btwStp = ColorSpan interStep
-        (btwStp colorC colorA |> Seq.toArray)
-            |> Array.append  [| colorC |] 
-            |> Array.append (btwStp colorB colorC |> Seq.toArray)
-            |> Array.append [| colorB |] 
-            |> Array.append (btwStp colorA colorB |> Seq.toArray)
-            |> Array.append [| colorA |]
+        (btwStp colorC colorA)
+            |> Seq.append(seq { yield colorC })
+            |> Seq.append(btwStp colorB colorC)
+            |> Seq.append(seq { yield colorB })
+            |> Seq.append(btwStp colorA colorB)
+            |> Seq.append(seq { yield colorA })
 
 
     let QuadColorRing (interStep:int) (colorA:Color) (colorB:Color) 
                   (colorC:Color) (colorD:Color) =
         let btwStp = ColorSpan interStep
-        (btwStp colorD colorA |> Seq.toArray)
-            |> Array.append  [| colorD |] 
-            |> Array.append (btwStp colorC colorD |> Seq.toArray)
-            |> Array.append  [| colorC |] 
-            |> Array.append (btwStp colorB colorC |> Seq.toArray)
-            |> Array.append [| colorB |] 
-            |> Array.append (btwStp colorA colorB |> Seq.toArray)
-            |> Array.append [| colorA |]
+        (btwStp colorD colorA)
+            |> Seq.append(seq { yield colorD })
+            |> Seq.append(btwStp colorC colorD)
+            |> Seq.append(seq { yield colorC })
+            |> Seq.append(btwStp colorB colorC)
+            |> Seq.append(seq { yield colorB })
+            |> Seq.append(btwStp colorA colorB)
+            |> Seq.append(seq { yield colorA })
 
 
     let ColStr (col:Color) = 
@@ -76,13 +80,24 @@ module ColorSets =
         
 
     // Exp distributes 14 colors over the range [1, 196]
-    let WcLegend = 
+    let WcColorsLegend = 
         { minC=Colors.Transparent; maxC=Colors.HotPink; 
           spanC=WcColors; mapper=GenSteps.InvExpStepOne; 
           minV=1.0; maxV=196.0; tics=GenSteps.ExpStepTicsOne }
 
 
-    let GetColor<'a when 'a:comparison> (lm:LegendMap1d<'a>) (value:'a) =
+    let WcBrushesLegend = 
+        { BrushMap.minB=new SolidColorBrush(Colors.Transparent); 
+          maxB=new SolidColorBrush(Colors.HotPink); 
+          spanB=WcColors |> Array.map(fun c->new SolidColorBrush(c)); 
+          mapper=GenSteps.InvExpStepOne; 
+          minV=1.0; maxV=196.0; tics=GenSteps.ExpStepTicsOne }
+
+
+    let GetColor<'a when 'a:comparison> (lm:ColorMap<'a>) (value:'a) =
         if (value < lm.minV) then lm.minC
         else if (value > lm.maxV) then lm.maxC
         else lm.spanC.[lm.mapper value]
+
+
+    
