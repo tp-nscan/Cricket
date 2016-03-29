@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Media;
 using Cricket.Common;
 using Cricket.Graphics;
+using TT;
 
 namespace Cricket.ViewModel.Core
 {
@@ -96,19 +97,19 @@ namespace Cricket.ViewModel.Core
             if (Values==null) return;
 
             var binCount = (int) (GraphVm.WbImageVm.ControlWidth / Sharpness);
-            var bins = Histogram.Histogram1d(
+            var bins = Histos.Histogram1d(
                 min: MinValue, 
                 max: MaxValue, 
                 vals: Values, 
                 binCount: binCount);
 
-            var maxFreq = bins.Max(p => p.Count);
+            var maxFreq = bins.Max(p => p.V);
 
             GraphVm.Watermark = "Bin count: " + binCount;
             GraphVm.SetData(
                 imageWidth: GraphVm.WbImageVm.ControlWidth,
                 imageHeight: GraphVm.WbImageVm.ControlHeight,
-                boundingRect: new RectFloat(top:maxFreq, left: MinValue, bottom:0.0f, right:MaxValue),
+                boundingRect: new R<float>(maxY:maxFreq, minX: MinValue, minY: 0.0f, maxX: MaxValue),
                 plotPoints: null,
                 plotLines: null,
                 filledRects: MakePlotRectangles(hist: bins),
@@ -116,17 +117,17 @@ namespace Cricket.ViewModel.Core
         }
 
 
-        static List<WbVmUtils.PlotRectangle<Color>> MakePlotRectangles(
-            IEnumerable<Histogram.Bin1d> hist)
+        static List<RV<float, Color>> MakePlotRectangles(
+            IEnumerable<IV<float,int>> hist)
         {
             return 
                 hist.Select(
-                    v => new WbVmUtils.PlotRectangle<Color>(
-                            x: v.Min,
-                            y: 0,
-                            width: v.Max - v.Min,
-                            height: v.Count,
-                            val: Colors.Aqua
+                    v => new RV<float, Color>(
+                            minX: v.Min,
+                            minY: 0,
+                            maxX: v.Max,
+                            maxY: v.V,
+                            v: Colors.Aqua
                         )).ToList();
         }
 

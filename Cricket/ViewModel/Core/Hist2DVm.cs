@@ -4,12 +4,13 @@ using System.Linq;
 using System.Windows.Media;
 using Cricket.Common;
 using Cricket.Graphics;
+using TT;
 
 namespace Cricket.ViewModel.Core
 {
     public class Hist2DVm : BindableBase
     {
-        public Hist2DVm(int sharpness, D2r<float> bounds)
+        public Hist2DVm(int sharpness, R<float> bounds)
         {
             _enforceBounds = true;
             Sharpness = sharpness;
@@ -30,9 +31,9 @@ namespace Cricket.ViewModel.Core
 
         public int Sharpness { get; }
 
-        public D2r<float> Bounds { get; private set; }
+        public R<float> Bounds { get; private set; }
 
-        public List<Z2<float>> Values { get; private set; }
+        public List<P2<float>> Values { get; private set; }
 
         private IDisposable _szChangedSubscr;
         private GraphVm _graphVm;
@@ -60,7 +61,7 @@ namespace Cricket.ViewModel.Core
             }
         }
 
-        public void UpdateData(IEnumerable<Z2<float>> values)
+        public void UpdateData(IEnumerable<P2<float>> values)
         {
             if (EnforceBounds)
             {
@@ -88,11 +89,11 @@ namespace Cricket.ViewModel.Core
                 return;
             }
 
-            var binCounts = new Z2<int>(
+            var binCounts = new P2<int>(
                 (int)(GraphVm.WbImageVm.ControlWidth / Sharpness), 
                 (int)(GraphVm.WbImageVm.ControlHeight / Sharpness));
 
-            var bins = Histogram.Histogram2d(
+            var bins = Histos.Histogram2d(
                 bounds: Bounds,
                 binCount: binCounts,
                 vals: Values).ToColumnMajorOrder();
@@ -109,17 +110,17 @@ namespace Cricket.ViewModel.Core
 
         }
 
-        private List<WbVmUtils.PlotRectangle<Color>> MakePlotRectangles(
-            IEnumerable<Histogram.Bin2d> hist)
+        private List<RV<float, Color>> MakePlotRectangles(
+            IEnumerable<RV<float, int>> hist)
         {
             return
                 hist.Select(
-                    v => new WbVmUtils.PlotRectangle<Color>(
-                            x: v.MinX,
-                            y: v.MinY,
-                            width: v.MaxX - v.MinX,
-                            height: v.MaxY - v.MinY,
-                            val: ColorSelector(v.Count)
+                    v => new RV<float, Color>(
+                            minX: v.MinX,
+                            minY: v.MinY,
+                            maxX: v.MaxX,
+                            maxY: v.MaxY,
+                            v: ColorSelector(v.V)
                         )).ToList();
         }
 

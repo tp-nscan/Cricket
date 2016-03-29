@@ -1,11 +1,11 @@
 ﻿<UserControl
-    x:Class="HopAlong.Views.Core.Grid2DControl"
+    x:Class="Cricket.View.Common.Grid2DControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:core="clr-namespace:Cricket.ViewModel.Design.Core"
-    xmlns:core1="clr-namespace:HopAlong.Views.Core"
+    xmlns:common="clr-namespace:Cricket.View.Common"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
@@ -23,7 +23,7 @@
                 BorderThickness="1"
                 BorderBrush="White">
 
-                <core1:WbImage x:Name="wbImage"
+                <common:WbImage x:Name="wbImage"
                     ControlHeight = "{Binding WbImageVm.ControlHeight, Mode=TwoWay}"
                     ControlWidth = "{Binding WbImageVm.ControlWidth, Mode=TwoWay}"
                     PointerPosition ="{Binding WbImageVm.PointerPosition, Mode=TwoWay}"

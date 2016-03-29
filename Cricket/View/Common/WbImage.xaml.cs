@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using Cricket.Common;
 using Cricket.ViewModel.Core;
 
 namespace Cricket.View.Common
@@ -68,40 +69,39 @@ namespace Cricket.View.Common
 
             using (_writeableBmp.GetBitmapContext())
             {
-
                 XFactor = ActualWidth / WbImageData.BoundingRect.Width();
                 YFactor = ActualHeight / WbImageData.BoundingRect.Height();
 
                 foreach (var plotRectangle in WbImageData.FilledRectangles)
                 {
                     _writeableBmp.FillRectangle(
-                            XWindow(plotRectangle.X, WbImageData.BoundingRect.Left),
-                            YWindow(plotRectangle.Y, ActualHeight, WbImageData.BoundingRect.Bottom),
-                            XWindow(plotRectangle.X + plotRectangle.Width, WbImageData.BoundingRect.Left),
-                            YWindow(plotRectangle.Y + plotRectangle.Height, ActualHeight, WbImageData.BoundingRect.Bottom),
-                            plotRectangle.Val
+                            XWindow(plotRectangle.MinX, WbImageData.BoundingRect.MinX),
+                            YWindow(plotRectangle.MinY, ActualHeight, WbImageData.BoundingRect.MinY),
+                            XWindow(plotRectangle.MinX + plotRectangle.Width(), WbImageData.BoundingRect.MinX),
+                            YWindow(plotRectangle.MinY + plotRectangle.Height(), ActualHeight, WbImageData.BoundingRect.MinY),
+                            plotRectangle.V
                         );
                 }
 
                 foreach (var plotRectangle in WbImageData.OpenRectangles)
                 {
                     _writeableBmp.DrawRectangle(
-                            XWindow(plotRectangle.X, WbImageData.BoundingRect.Left),
-                            YWindow(plotRectangle.Y, ActualHeight, WbImageData.BoundingRect.Bottom),
-                            XWindow(plotRectangle.X + plotRectangle.Width, WbImageData.BoundingRect.Left),
-                            YWindow(plotRectangle.Y + plotRectangle.Height, ActualHeight, WbImageData.BoundingRect.Bottom),
-                            plotRectangle.Val
+                            XWindow(plotRectangle.MinX, WbImageData.BoundingRect.MinX),
+                            YWindow(plotRectangle.MinY, ActualHeight, WbImageData.BoundingRect.MinY),
+                            XWindow(plotRectangle.MinX + plotRectangle.Width(), WbImageData.BoundingRect.MinX),
+                            YWindow(plotRectangle.MinY + plotRectangle.Height(), ActualHeight, WbImageData.BoundingRect.MinY),
+                            plotRectangle.V
                         );
                 }
 
                 foreach (var plotLine in WbImageData.PlotLines)
                 {
                     _writeableBmp.DrawLineAa(
-                        XWindow(plotLine.X1, WbImageData.BoundingRect.Left),
-                        YWindow(plotLine.Y1, ActualHeight, WbImageData.BoundingRect.Bottom),
-                        XWindow(plotLine.X2, WbImageData.BoundingRect.Left),
-                        YWindow(plotLine.Y2, ActualHeight, WbImageData.BoundingRect.Bottom),
-                        plotLine.Val
+                        XWindow(plotLine.X1, WbImageData.BoundingRect.MinX),
+                        YWindow(plotLine.Y1, ActualHeight, WbImageData.BoundingRect.MinY),
+                        XWindow(plotLine.X2, WbImageData.BoundingRect.MinX),
+                        YWindow(plotLine.Y2, ActualHeight, WbImageData.BoundingRect.MinY),
+                        plotLine.V
                         );
                 }
 
@@ -109,11 +109,11 @@ namespace Cricket.View.Common
                 foreach (var plotPoint in WbImageData.PlotPoints)
                 {
                     _writeableBmp.FillRectangle(
-                        XWindow(plotPoint.X, WbImageData.BoundingRect.Left),
-                        YWindow(plotPoint.Y, ActualHeight, WbImageData.BoundingRect.Bottom),
-                        XWindow(plotPoint.X + 1, WbImageData.BoundingRect.Left),
-                        YWindow(plotPoint.Y + 1, ActualHeight, WbImageData.BoundingRect.Bottom),
-                        plotPoint.Val
+                        XWindow(plotPoint.X, WbImageData.BoundingRect.MinX),
+                        YWindow(plotPoint.Y, ActualHeight, WbImageData.BoundingRect.MinY),
+                        XWindow(plotPoint.X + 1, WbImageData.BoundingRect.MinX),
+                        YWindow(plotPoint.Y + 1, ActualHeight, WbImageData.BoundingRect.MinY),
+                        plotPoint.V
                         );
                 }
 
@@ -171,8 +171,8 @@ namespace Cricket.View.Common
             var s = e.GetPosition(this);
             PointerPosition = new Point
             {
-                X = WbImageData.BoundingRect.Left + s.X / XFactor,
-                Y = WbImageData.BoundingRect.Top - s.Y / YFactor
+                X = WbImageData.BoundingRect.MinX + s.X / XFactor,
+                Y = WbImageData.BoundingRect.MaxY - s.Y / YFactor
             };
         }
     }

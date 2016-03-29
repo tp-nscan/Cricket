@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Cricket.ViewModel.Core;
+using TT;
 
 namespace Cricket.ViewModel.Design.Core
 {
@@ -11,7 +12,7 @@ namespace Cricket.ViewModel.Design.Core
             UpdateData(TestData());
         }
 
-        public static IEnumerable<Z2<float>> TestData()
+        public static IEnumerable<P2<float>> TestData()
         {
             var g = new MathNet.Numerics.Distributions.Normal(0.0, 1.0);
             var randy = new MathNet.Numerics.Random.MersenneTwister();
@@ -22,7 +23,7 @@ namespace Cricket.ViewModel.Design.Core
             g.Samples(dblsX);
             g.Samples(dblsY);
             return dblsX.Select((d,i) => 
-                new Z2<float>((float)d, (float)dblsY[i]));
+                new P2<float>((float)d, (float)dblsY[i]));
         }
     }
 }

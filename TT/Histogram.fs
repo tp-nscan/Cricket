@@ -1,7 +1,7 @@
 ﻿namespace TT
 open System
 
-module Histogram =
+module Histos =
 
     type Bin1d = IV<float32, int>
 

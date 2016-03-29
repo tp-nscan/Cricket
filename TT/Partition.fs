@@ -7,14 +7,23 @@ module GenSteps =
     //Used to make the WC legends
 
     let ExpStepSeq (div:float) (ofBase:float) =
-        
-        Seq.initInfinite(fun x -> Math.Pow(ofBase, (float x+1.0) / div))
+        Seq.initInfinite(fun x -> (float32 (Math.Pow(ofBase, (float x+1.0) / div))) )
+
 
     let ExpStepTicsOne = ExpStepSeq 7.0 14.0 |> Seq.take(14) |> Seq.toArray
 
 
+    let UF32to256 (value:float32) =
+        (int (value * 255.99f))
+
+
+    let SF32to256 (value:float32) =
+        (int (value * 127.99f - 127.98f))
+
+
     let InvExpStep (div:float) (ofBase:float) (value:float) =
         Math.Log(value, ofBase) * div - 1.0
+
 
     let InvExpStepOne value = (int (InvExpStep 7.0 14.0 value))
 

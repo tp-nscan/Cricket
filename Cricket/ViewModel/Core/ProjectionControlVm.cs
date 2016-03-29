@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Cricket.Common;
 using MathNet.Numerics.LinearAlgebra;
+using TT;
 
 namespace Cricket.ViewModel.Core
 {
@@ -79,7 +80,7 @@ namespace Cricket.ViewModel.Core
             if (! YSelectorVm.SelectedKeys.Any()) return;
             StateMatrix = state;
             ProjMatrix = proj;
-            var ject = MathNetUtils.ProjectTo2D
+            var ject = MatrixUt.ProjectTo2D
                     (
                         basis: ProjMatrix.Transpose(),
                         states: StateMatrix,
@@ -90,24 +91,24 @@ namespace Cricket.ViewModel.Core
             GraphVm.SetData(
                 imageWidth: GraphVm.WbImageVm.ControlWidth,
                 imageHeight: GraphVm.WbImageVm.ControlHeight,
-                plotPoints: new List<WbVmUtils.PlotPoint<Color>>(), 
-                plotLines: new List<WbVmUtils.PlotLine<Color>>(), 
+                plotPoints: new List<P2V<float, Color>>(), 
+                plotLines: new List<LS2V<float, Color>>(), 
                 filledRects: MakePlotRectangles(points: ject),
-                openRects: new List<WbVmUtils.PlotRectangle<Color>>());
+                openRects: new List<RV<float, Color>>());
 
         }
 
-        static List<WbVmUtils.PlotRectangle<Color>> MakePlotRectangles(
-            IEnumerable<Z2<float>> points)
+        static List<RV<float, Color>> MakePlotRectangles(
+            IEnumerable<P2<float>> points)
         {
                     return
                         points.Select(
-                            v => new WbVmUtils.PlotRectangle<Color>(
-                                    x: v.X,
-                                    y: v.Y,
-                                    width: 2,
-                                    height: 2,
-                                    val: Colors.Aqua
+                            v => new RV<float, Color>(
+                                    minX: v.X,
+                                    minY: v.Y,
+                                    maxX: v.X + 2.0f,
+                                    maxY: v.Y + 2.0f,
+                                    v: Colors.Aqua
                                 )).ToList();
         }
 
@@ -115,7 +116,7 @@ namespace Cricket.ViewModel.Core
 
         public Matrix<float> StateMatrix { get; private set; }
 
-        public List<F2V<float>> Values { get; private set; }
+        //public List<P2V<float,float>> Values { get; private set; }
 
 
         private string _title;

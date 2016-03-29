@@ -2,11 +2,11 @@
 open System
 open System.Windows.Media
 
-type ColorMap<'a> = 
+type ColorLeg<'a> = 
     { minC:Color; maxC:Color; spanC:Color[]; mapper:'a->int; minV:'a; maxV:'a;
       tics: 'a[] }
 
-type BrushMap<'a> = 
+type BrushLeg<'a> = 
     { minB:Brush; maxB:Brush; spanB:SolidColorBrush[]; mapper:'a->int; minV:'a; maxV:'a;
       tics: 'a[] }
 
@@ -41,6 +41,10 @@ module ColorSets =
                 ByteInterp colStart.R colEnd.R (stepCount + 1) step,
                 ByteInterp colStart.G colEnd.G (stepCount + 1) step,
                 ByteInterp colStart.B colEnd.B (stepCount + 1) step))
+
+
+    let RedBlueSpan =
+        ColorSpan 256 Colors.Red Colors.Blue |> Seq.toArray
 
 
     let TriColorStrip (interStep:int) (colorA:Color) (colorB:Color) (colorC:Color) =
@@ -79,22 +83,28 @@ module ColorSets =
         sprintf "[%i, %i, %i]" col.R col.G col.B
         
 
+    let RedBlueSigned =
+        { minC=Colors.Brown; maxC=Colors.HotPink; 
+          spanC=RedBlueSpan; mapper=GenSteps.SF32to256; 
+          minV=1.0f; maxV=196.0f; tics=GenSteps.ExpStepTicsOne }
+
+
     // Exp distributes 14 colors over the range [1, 196]
-    let WcColorsLegend = 
-        { minC=Colors.Transparent; maxC=Colors.HotPink; 
-          spanC=WcColors; mapper=GenSteps.InvExpStepOne; 
-          minV=1.0; maxV=196.0; tics=GenSteps.ExpStepTicsOne }
+//    let WcColorsLegend = 
+//        { minC=Colors.Transparent; maxC=Colors.HotPink; 
+//          spanC=WcColors; mapper=GenSteps.InvExpStepOne; 
+//          minV=1.0f; maxV=196.0f; tics=GenSteps.ExpStepTicsOne }
+//
+//
+//    let WcBrushesLegend = 
+//        { BrushMap.minB=new SolidColorBrush(Colors.Transparent); 
+//          maxB=new SolidColorBrush(Colors.HotPink); 
+//          spanB=WcColors |> Array.map(fun c->new SolidColorBrush(c)); 
+//          mapper=GenSteps.InvExpStepOne; 
+//          minV=1.0f; maxV=196.0f; tics=GenSteps.ExpStepTicsOne }
 
 
-    let WcBrushesLegend = 
-        { BrushMap.minB=new SolidColorBrush(Colors.Transparent); 
-          maxB=new SolidColorBrush(Colors.HotPink); 
-          spanB=WcColors |> Array.map(fun c->new SolidColorBrush(c)); 
-          mapper=GenSteps.InvExpStepOne; 
-          minV=1.0; maxV=196.0; tics=GenSteps.ExpStepTicsOne }
-
-
-    let GetColor<'a when 'a:comparison> (lm:ColorMap<'a>) (value:'a) =
+    let GetColor<'a when 'a:comparison> (lm:ColorLeg<'a>) (value:'a) =
         if (value < lm.minV) then lm.minC
         else if (value > lm.maxV) then lm.maxC
         else lm.spanC.[lm.mapper value]

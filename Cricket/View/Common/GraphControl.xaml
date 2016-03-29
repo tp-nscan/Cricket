@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:core="clr-namespace:Cricket.ViewModel.Design.Core"
-    xmlns:core1="clr-namespace:HopAlong.Views.Core"
+    xmlns:common="clr-namespace:Cricket.View.Common"
     mc:Ignorable="d"
     d:DesignWidth="600"
     d:DesignHeight="600"
@@ -33,7 +33,7 @@
                     BorderBrush="White"
                     Grid.Column="2">
 
-                <core1:WbImage x:Name="wbImage"
+                <common:WbImage x:Name="wbImage"
                     ControlHeight = "{Binding WbImageVm.ControlHeight, Mode=TwoWay}"
                     ControlWidth = "{Binding WbImageVm.ControlWidth, Mode=TwoWay}"
                     PointerPosition ="{Binding WbImageVm.PointerPosition, Mode=TwoWay}"

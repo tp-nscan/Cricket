@@ -10,13 +10,13 @@ namespace Cricket.ViewModel.Core
 {
     public class Grid4DVm<T> : BindableBase
     {
-        public Grid4DVm(P2<int> strides, P2<int> cursor, Func<T, Color> colorMapper, string title = "")
+        public Grid4DVm(P2<int> strides, P2<int> cursor, ColorLeg<T> colorLeg, string title = "")
         {
             _x1Y1 = true;
             Strides = strides;
             Cursor = cursor;
             Values = new List<LS2V<int,T>>();
-            ColorMapper = colorMapper;
+            ColorLeg = colorLeg;
             WbImageVm = new WbImageVm();
             Title = title;
         }
@@ -50,7 +50,7 @@ namespace Cricket.ViewModel.Core
 
         public P2<int> Strides { get; }
 
-        public Func<T, Color> ColorMapper { get; }
+        public ColorLeg<T> ColorLeg { get; }
 
         public List<LS2V<int,T>> Values { get; private set; }
 
@@ -116,7 +116,7 @@ namespace Cricket.ViewModel.Core
                         minY: v.Y2,
                         maxX: v.X2 + 1.0f,
                         maxY: v.Y2 + 1.0f,
-                        v: ColorMapper(v.V)
+                        v: ColorSets.GetColor(ColorLeg, v.V)
                     );
             }
             if (X1X2)
@@ -126,7 +126,7 @@ namespace Cricket.ViewModel.Core
                         minY: v.Y2,
                         maxX: v.Y1 + 1.0f,
                         maxY: v.Y2 + 1.0f,
-                        v: ColorMapper(v.V)
+                        v: ColorSets.GetColor(ColorLeg, v.V)
                     );
             }
             if (X1Y2)
@@ -136,7 +136,7 @@ namespace Cricket.ViewModel.Core
                         minY: v.X2,
                         maxX: v.Y1 + 1.0f,
                         maxY: v.X2 + 1.0f,
-                        v: ColorMapper(v.V)
+                        v: ColorSets.GetColor(ColorLeg, v.V)
                     );
             }
             if (Y1X2)
@@ -146,7 +146,7 @@ namespace Cricket.ViewModel.Core
                         minY: v.Y2,
                         maxX: v.X1 + 1.0f,
                         maxY: v.Y2 + 1.0f,
-                        v: ColorMapper(v.V)
+                        v: ColorSets.GetColor(ColorLeg, v.V)
                     );
             }
             if (Y1Y2)
@@ -156,7 +156,7 @@ namespace Cricket.ViewModel.Core
                         minY: v.X2,
                         maxX: v.X1 + 1.0f,
                         maxY: v.X2 + 1.0f,
-                        v: ColorMapper(v.V)
+                        v: ColorSets.GetColor(ColorLeg, v.V)
                     );
             }
             if (X2Y2)
@@ -166,7 +166,7 @@ namespace Cricket.ViewModel.Core
                         minY: v.Y1,
                         maxX: v.X1 + 1.0f,
                         maxY: v.Y1 + 1.0f,
-                        v: ColorMapper(v.V)
+                        v: ColorSets.GetColor(ColorLeg, v.V)
                     );
             }
             throw new Exception("case not handled in FilterByCursor");

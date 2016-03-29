@@ -9,10 +9,10 @@ namespace Cricket.ViewModel.Core
 {
     public class Grid2DVm<T> : BindableBase
     {
-        public Grid2DVm(Sz2<int> strides, Func<T, Color> colorMapper, string title = "")
+        public Grid2DVm(Sz2<int> strides, ColorLeg<T> colorLeg, string title = "")
         {
             Strides = strides;
-            ColorMapper = colorMapper;
+            ColorLeg = colorLeg;
             WbImageVm = new WbImageVm();
             Title = title;
         }
@@ -34,7 +34,7 @@ namespace Cricket.ViewModel.Core
 
         public Sz2<int> Strides { get; }
 
-        public Func<T, Color> ColorMapper { get;}
+        public ColorLeg<T> ColorLeg { get;}
 
         public List<P2V<int,T>> Values { get; private set; }
 
@@ -66,7 +66,7 @@ namespace Cricket.ViewModel.Core
                     minY: v.Y,
                     maxX: v.X + 1.0f,
                     maxY: v.Y + 1.0f,
-                    v: ColorMapper(v.V)
+                    v: ColorSets.GetColor(ColorLeg, v.V)
                 );
         }
 

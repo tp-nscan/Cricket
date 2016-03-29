@@ -7,12 +7,12 @@ namespace Cricket.ViewModel.Design.Core
     public class Grid4DVmD : Grid4DVm<float>
     {
         private static int GridStride = 15;
-        public Grid4DVmD() : base(Bounds, CursorSt, ColorMap<>.RedBlueUnit, "Test title")
+        public Grid4DVmD() : base(Bounds, CursorSt, ColorSets.RedBlueSigned, "Test title")
         {
            UpdateData(TestData);
         }
 
-        public static IEnumerable<V2_2<float>> TestData
+        public static IEnumerable<LS2V<int,float>> TestData
         {
             get
             {
@@ -20,9 +20,9 @@ namespace Cricket.ViewModel.Design.Core
             }
         }
 
-        public static Z2<int> Bounds = new Z2<int>(GridStride, GridStride);
+        public static P2<int> Bounds = new P2<int>(GridStride, GridStride);
 
-        public static Z2<int> CursorSt = new Z2<int>(7, 4);
+        public static P2<int> CursorSt = new P2<int>(7, 4);
 
     }
 }
