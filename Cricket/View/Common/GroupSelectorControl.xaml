@@ -4,9 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:core="clr-namespace:Cricket.ViewModel.Design.Core"
+    xmlns:common="clr-namespace:Cricket.ViewModel.Design.Common"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type=core:GroupSelectorVmD, IsDesignTimeCreatable=True}"
+    d:DataContext="{d:DesignInstance Type=common:GroupSelectorVmD, IsDesignTimeCreatable=True}"
     >
     <UserControl.Resources>
         <DataTemplate x:Key="ItselTemplate">

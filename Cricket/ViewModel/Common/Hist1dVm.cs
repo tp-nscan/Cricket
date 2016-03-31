@@ -6,7 +6,7 @@ using Cricket.Common;
 using Cricket.Graphics;
 using TT;
 
-namespace Cricket.ViewModel.Core
+namespace Cricket.ViewModel.Common
 {
     public class Hist1DVm : BindableBase
     {

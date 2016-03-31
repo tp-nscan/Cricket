@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Cricket.ViewModel.Core;
+using Cricket.ViewModel.Common;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.Random;
 
-namespace Cricket.ViewModel.Design.Core
+namespace Cricket.ViewModel.Design.Common
 {
     public class Hist1DvmD : Hist1DVm
     {

@@ -7,7 +7,7 @@ using Cricket.Common;
 using MathNet.Numerics.LinearAlgebra;
 using TT;
 
-namespace Cricket.ViewModel.Core
+namespace Cricket.ViewModel.Common
 {
     public class ProjectionControlVm : BindableBase
     {

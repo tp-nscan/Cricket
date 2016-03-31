@@ -6,7 +6,7 @@ using System.Reactive.Subjects;
 using System.Windows.Controls;
 using Cricket.Common;
 
-namespace Cricket.ViewModel.Core
+namespace Cricket.ViewModel.Common
 {
     public class GroupSelectorVm : BindableBase
     {

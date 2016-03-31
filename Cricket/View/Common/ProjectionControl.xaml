@@ -4,12 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:core="clr-namespace:Cricket.ViewModel.Design.Core"
     xmlns:common="clr-namespace:Cricket.View.Common"
+    xmlns:common1="clr-namespace:Cricket.ViewModel.Design.Common"
     mc:Ignorable="d"
     d:DesignHeight="600"
     d:DesignWidth="900"
-    d:DataContext="{d:DesignInstance Type=core:ProjectionControlVmD, IsDesignTimeCreatable=True}">
+    d:DataContext="{d:DesignInstance Type=common1:ProjectionControlVmD, IsDesignTimeCreatable=True}">
 
     <Border BorderThickness="1" BorderBrush="Gray">
         <Grid>

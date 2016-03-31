@@ -24,7 +24,7 @@ module GenSteps =
 
 
     let SF32to256 (value:float32) =
-        (int (value * 127.99f - 127.98f))
+        (int (value * 127.99f + 127.98f))
 
 
     let InvExpStep (div:float) (ofBase:float) (value:float) =

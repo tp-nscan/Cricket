@@ -87,23 +87,23 @@
     </Compile>
     <Compile Include="Common\BText.cs" />
     <Compile Include="Common\EnumerExt.cs" />
-    <Compile Include="ViewModel\Core\GraphVm.cs" />
-    <Compile Include="ViewModel\Core\Grid2DVm.cs" />
-    <Compile Include="ViewModel\Core\Grid4DVm.cs" />
-    <Compile Include="ViewModel\Core\GroupSelectorVm.cs" />
-    <Compile Include="ViewModel\Core\Hist1dVm.cs" />
-    <Compile Include="ViewModel\Core\Hist2DVm.cs" />
-    <Compile Include="ViewModel\Core\ItemSelectorVm.cs" />
-    <Compile Include="ViewModel\Core\ProjectionControlVm.cs" />
-    <Compile Include="ViewModel\Core\WbImageData.cs" />
-    <Compile Include="ViewModel\Core\WbImageVm.cs" />
-    <Compile Include="ViewModel\Design\Core\GraphVmD.cs" />
-    <Compile Include="ViewModel\Design\Core\Grid2DVmD.cs" />
-    <Compile Include="ViewModel\Design\Core\Grid4DVmD.cs" />
-    <Compile Include="ViewModel\Design\Core\GroupSelectorVmD.cs" />
-    <Compile Include="ViewModel\Design\Core\HIst1DVmD.cs" />
-    <Compile Include="ViewModel\Design\Core\Hist2DVmD.cs" />
-    <Compile Include="ViewModel\Design\Core\ProjectionControlVmD.cs" />
+    <Compile Include="ViewModel\Common\GraphVm.cs" />
+    <Compile Include="ViewModel\Common\Grid2DVm.cs" />
+    <Compile Include="ViewModel\Common\Grid4DVm.cs" />
+    <Compile Include="ViewModel\Common\GroupSelectorVm.cs" />
+    <Compile Include="ViewModel\Common\Hist1dVm.cs" />
+    <Compile Include="ViewModel\Common\Hist2DVm.cs" />
+    <Compile Include="ViewModel\Common\ItemSelectorVm.cs" />
+    <Compile Include="ViewModel\Common\ProjectionControlVm.cs" />
+    <Compile Include="ViewModel\Common\WbImageData.cs" />
+    <Compile Include="ViewModel\Common\WbImageVm.cs" />
+    <Compile Include="ViewModel\Design\Common\GraphVmD.cs" />
+    <Compile Include="ViewModel\Design\Common\Grid2DVmD.cs" />
+    <Compile Include="ViewModel\Design\Common\Grid4DVmD.cs" />
+    <Compile Include="ViewModel\Design\Common\GroupSelectorVmD.cs" />
+    <Compile Include="ViewModel\Design\Common\HIst1DVmD.cs" />
+    <Compile Include="ViewModel\Design\Common\Hist2DVmD.cs" />
+    <Compile Include="ViewModel\Design\Common\ProjectionControlVmD.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -153,6 +153,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Compile Include="ViewModel\Pages\SandboxPageVm.cs" />
     <Compile Include="View\Common\GraphControl.xaml.cs">
       <DependentUpon>GraphControl.xaml</DependentUpon>
     </Compile>

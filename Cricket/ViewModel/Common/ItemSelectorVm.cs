@@ -2,7 +2,7 @@
 using System.Reactive.Subjects;
 using Cricket.Common;
 
-namespace Cricket.ViewModel.Core
+namespace Cricket.ViewModel.Common
 {
     public class ItemSelectorVm : BindableBase
     {

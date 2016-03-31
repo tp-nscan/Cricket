@@ -12,8 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Cricket.Pages.Settings;
 
-namespace Cricket.Pages.Settings
+namespace Cricket.View.Pages.Settings
 {
     /// <summary>
     /// Interaction logic for Appearance.xaml
@@ -25,7 +26,7 @@ namespace Cricket.Pages.Settings
             InitializeComponent();
 
             // create and assign the appearance view model
-            this.DataContext = new AppearanceViewModel();
+            DataContext = new AppearanceViewModel();
         }
     }
 }

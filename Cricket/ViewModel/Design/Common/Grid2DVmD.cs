@@ -1,8 +1,7 @@
-﻿
-using Cricket.ViewModel.Core;
+﻿using Cricket.ViewModel.Common;
 using TT;
 
-namespace Cricket.ViewModel.Design.Core
+namespace Cricket.ViewModel.Design.Common
 {
     public class Grid2DVmD : Grid2DVm<float>
     {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Cricket.Common;
-using Cricket.ViewModel.Core;
+using Cricket.ViewModel.Common;
 
-namespace Cricket.ViewModel.Design.Core
+namespace Cricket.ViewModel.Design.Common
 {
     public class ProjectionControlVmD : ProjectionControlVm
     {

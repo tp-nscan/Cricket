@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Windows.Media;
 using Cricket.Graphics;
-using Cricket.ViewModel.Core;
+using Cricket.ViewModel.Common;
 using TT;
 
-namespace Cricket.ViewModel.Design.Core
+namespace Cricket.ViewModel.Design.Common
 {
     public class GraphVmD : GraphVm
     {

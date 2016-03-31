@@ -16,9 +16,9 @@ namespace Cricket.View.Common
 
         private void WbImage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            MakeBitmap();
             ControlWidth = ActualWidth;
             ControlHeight = ActualHeight;
+            MakeBitmap();
         }
 
         public ImageData ImageData

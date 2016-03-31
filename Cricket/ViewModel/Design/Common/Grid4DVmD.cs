@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Cricket.ViewModel.Core;
+using Cricket.ViewModel.Common;
 using TT;
 
-namespace Cricket.ViewModel.Design.Core
+namespace Cricket.ViewModel.Design.Common
 {
     public class Grid4DVmD : Grid4DVm<float>
     {

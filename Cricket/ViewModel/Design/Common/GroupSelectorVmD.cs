@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Windows.Controls;
 using Cricket.Common;
-using Cricket.ViewModel.Core;
+using Cricket.ViewModel.Common;
 
-namespace Cricket.ViewModel.Design.Core
+namespace Cricket.ViewModel.Design.Common
 {
     public class GroupSelectorVmD : GroupSelectorVm
     {

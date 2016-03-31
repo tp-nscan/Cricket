@@ -107,7 +107,8 @@ module ColorSets =
     let GetColor<'a when 'a:comparison> (lm:ColorLeg<'a>) (value:'a) =
         if (value < lm.minV) then lm.minC
         else if (value > lm.maxV) then lm.maxC
-        else lm.spanC.[lm.mapper value]
+        else
+        lm.spanC.[lm.mapper value]
 
 
     
