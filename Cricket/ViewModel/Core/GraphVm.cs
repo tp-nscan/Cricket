@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 using Cricket.Common;
 using TT;
@@ -23,40 +24,38 @@ namespace Cricket.ViewModel.Core
             List<RV<float, Color>> openRects
         )
         {
-            WbImageVm.WbImageData = new WbImageData(
-                    imageWidth: imageWidth,
-                    imageHeight: imageHeight,
+            WbImageVm.ImageData = Id.MakeImageData(
+                    imageSize: new Sz2<double>(imageWidth, imageHeight), 
                     plotPoints: plotPoints,
                     filledRects: filledRects,
                     openRects: openRects,
                     plotLines: plotLines
                 );
 
-            MinX = WbImageVm.WbImageData.BoundingRect.MinX;
-            MinY = WbImageVm.WbImageData.BoundingRect.MinY;
-            MaxX = WbImageVm.WbImageData.BoundingRect.MaxX;
-            MaxY = WbImageVm.WbImageData.BoundingRect.MaxY;
+            MinX = (float) WbImageVm.ImageData.boundingRect.MinX;
+            MinY = (float) WbImageVm.ImageData.boundingRect.MinY;
+            MaxX = (float) WbImageVm.ImageData.boundingRect.MaxX;
+            MaxY = (float) WbImageVm.ImageData.boundingRect.MaxY;
         }
 
         public void SetData(
             R<float> boundingRect,
             double imageWidth,
             double imageHeight,
-            List<P2V<float, Color>> plotPoints,
-            List<LS2V<float, Color>> plotLines,
-            List<RV<float, Color>> filledRects,
-            List<RV<float, Color>> openRects
+            IEnumerable<P2V<float, Color>> plotPoints,
+            IEnumerable<LS2V<float, Color>> plotLines,
+            IEnumerable<RV<float, Color>> filledRects,
+            IEnumerable<RV<float, Color>> openRects
         )
         {
 
-            WbImageVm.WbImageData = new WbImageData(
+            WbImageVm.ImageData = new ImageData(
                     boundingRect: boundingRect,
-                    plotPoints: plotPoints,
-                    filledRects: filledRects,
-                    openRects: openRects,
-                    plotLines: plotLines,
-                    imageWidth: imageWidth,
-                    imageHeight: imageHeight
+                    plotPoints: plotPoints.ToArray(),
+                    filledRects: filledRects.ToArray(),
+                    openRects: openRects.ToArray(),
+                    plotLines: plotLines.ToArray(),
+                    imageSize: new Sz2<double>(imageWidth, imageHeight)
                 );
 
             MinX = boundingRect.MinX;

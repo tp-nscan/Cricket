@@ -30,7 +30,7 @@
                     PointerPosition ="{Binding WbImageVm.PointerPosition, Mode=TwoWay}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    WbImageData="{Binding WbImageVm.WbImageData}"
+                    ImageData="{Binding WbImageVm.ImageData}"
                 />
 
             </Border>

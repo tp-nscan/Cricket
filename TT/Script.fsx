@@ -182,6 +182,54 @@ ColorSets.QuadColorRing 2 Colors.Black Colors.White Colors.Red Colors.Blue |> Se
 //    Seq.initInfinite(fun x -> Math.Exp (la * Math.Pow( (float x), 0.85 )))
 //    |> Seq.take(14) |> Seq.toArray
 
+//
+//#r @"..\packages\MathNet.Numerics.3.11.0\lib\net40\MathNet.Numerics.dll"
+//#r @"..\packages\MathNet.Numerics.FSharp.3.11.0\lib\net40\MathNet.Numerics.FSharp.dll"
+//#r @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\PresentationCore.dll"
+//
+//#load "BT.fs"
+//#load "BTmap.fs"
+//#load "Gen.fs"
+//
+//open TT
+//
+//open System
+//open MathNet.Numerics
+//open MathNet.Numerics.Distributions
+//open MathNet.Numerics.Random
+//
+//let gg = GenV.Twist 3
+//let mappy = F32toF32.BinOfA F32toF32.Step14FromOneTo180
+//let mutable res = 3
+//#time
+//for i in 0 .. 1000000 do
+//    res <- mappy (gg.Next() % 400)
+
+
+
+//#r @"..\packages\MathNet.Numerics.3.11.0\lib\net40\MathNet.Numerics.dll"
+//#r @"..\packages\MathNet.Numerics.FSharp.3.11.0\lib\net40\MathNet.Numerics.FSharp.dll"
+//#r @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\PresentationCore.dll"
+//
+//#load "BT.fs"
+//#load "BTmap.fs"
+//#load "Gen.fs"
+//
+//open TT
+//
+//open System
+//open MathNet.Numerics
+//open MathNet.Numerics.Distributions
+//open MathNet.Numerics.Random
+//
+//let gg = GenV.Twist 3
+//let mappy = F32toF32.BinOfL F32toF32.Step14FromOneTo180L
+//let mutable res = 3
+//#time
+//for i in 0 .. 1000000 do
+//    res <- mappy (gg.Next() % 400)
+
+
 
 #r @"..\packages\MathNet.Numerics.3.11.0\lib\net40\MathNet.Numerics.dll"
 #r @"..\packages\MathNet.Numerics.FSharp.3.11.0\lib\net40\MathNet.Numerics.FSharp.dll"
@@ -190,42 +238,12 @@ ColorSets.QuadColorRing 2 Colors.Black Colors.White Colors.Red Colors.Blue |> Se
 #load "BT.fs"
 #load "BTmap.fs"
 #load "Gen.fs"
+#load "Partition.fs"
+#load "DesignData.fs"
 
 open TT
 
-open System
-open MathNet.Numerics
-open MathNet.Numerics.Distributions
-open MathNet.Numerics.Random
+(DesignData.Grid2DTestData {Sz2.X=10; Sz2.Y=15}) |> Seq.toArray
 
-let gg = GenV.Twist 3
-let mappy = F32toF32.BinOfA F32toF32.Step14FromOneTo180
-let mutable res = 3
-#time
-for i in 0 .. 1000000 do
-    res <- mappy (gg.Next() % 400)
-
-
-
-#r @"..\packages\MathNet.Numerics.3.11.0\lib\net40\MathNet.Numerics.dll"
-#r @"..\packages\MathNet.Numerics.FSharp.3.11.0\lib\net40\MathNet.Numerics.FSharp.dll"
-#r @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\PresentationCore.dll"
-
-#load "BT.fs"
-#load "BTmap.fs"
-#load "Gen.fs"
-
-open TT
-
-open System
-open MathNet.Numerics
-open MathNet.Numerics.Distributions
-open MathNet.Numerics.Random
-
-let gg = GenV.Twist 3
-let mappy = F32toF32.BinOfL F32toF32.Step14FromOneTo180L
-let mutable res = 3
-#time
-for i in 0 .. 1000000 do
-    res <- mappy (gg.Next() % 400)
+(CT.Raster2d {Sz2.X=4; Sz2.Y=4}) |> Seq.toArray
 

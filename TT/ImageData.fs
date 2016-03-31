@@ -4,7 +4,7 @@ open System.Windows.Media
 
 type ImageData = { plotPoints:P2V<float32, Color>[]; filledRects:RV<float32, Color>[];
                    openRects:RV<float32, Color>[]; plotLines:LS2V<float32, Color>[];
-                   imageSize:Sz2<float>; boundingRect:R<float> }
+                   imageSize:Sz2<float>; boundingRect:R<float32> }
 
 module Id =
 
@@ -25,7 +25,7 @@ module Id =
     br <- pls |> Array.fold (BT.StretchRL) br
 
     { plotPoints=pps; filledRects=frs; openRects=ors; plotLines=pls; 
-        imageSize=imageSize; boundingRect={ R.MinX=(float br.MinX);
-                                            R.MaxX=(float br.MaxX);
-                                            R.MinY=(float br.MinY);
-                                            R.MaxY=(float br.MaxY);} }
+        imageSize=imageSize; boundingRect={ R.MinX=(br.MinX);
+                                            R.MaxX=(br.MaxX);
+                                            R.MinY=(br.MinY);
+                                            R.MaxY=(br.MaxY);} }

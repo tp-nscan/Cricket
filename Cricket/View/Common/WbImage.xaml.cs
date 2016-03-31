@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Cricket.Common;
-using Cricket.ViewModel.Core;
+using TT;
 
 namespace Cricket.View.Common
 {
@@ -21,19 +21,19 @@ namespace Cricket.View.Common
             ControlHeight = ActualHeight;
         }
 
-        public WbImageData WbImageData
+        public ImageData ImageData
         {
-            get { return (WbImageData) GetValue(WbImageDataProperty); }
-            set { SetValue(WbImageDataProperty, value); }
+            get { return (ImageData) GetValue(ImageDataProperty); }
+            set { SetValue(ImageDataProperty, value); }
         }
 
-        public static readonly DependencyProperty WbImageDataProperty =
-            DependencyProperty.Register("WbImageData", typeof(WbImageData), typeof(WbImage),
-                new PropertyMetadata(null, OnWbImageDataChanged));
+        public static readonly DependencyProperty ImageDataProperty =
+            DependencyProperty.Register("ImageData", typeof(ImageData), typeof(WbImage),
+                new PropertyMetadata(null, OnImageDataChanged));
 
-        private static void OnWbImageDataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnImageDataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var imageData = (WbImageData)e.NewValue;
+            var imageData = (ImageData)e.NewValue;
             if (imageData == null)
             {
                 return;
@@ -48,7 +48,7 @@ namespace Cricket.View.Common
 
         private static bool ReadyToDisplay(WbImage wbImage)
         {
-            return wbImage?.WbImageData != null;
+            return wbImage?.ImageData != null;
         }
 
         private WriteableBitmap _writeableBmp;
@@ -59,60 +59,60 @@ namespace Cricket.View.Common
                 return;
             }
 
-            if (WbImageData == null)
+            if (ImageData == null)
             {
                 return;
             }
 
-            _writeableBmp = BitmapFactory.New((int)WbImageData.ImageWidth, (int)WbImageData.ImageHeight);
+            _writeableBmp = BitmapFactory.New((int)ImageData.imageSize.X, (int)ImageData.imageSize.Y);
             RootImage.Source = _writeableBmp;
 
             using (_writeableBmp.GetBitmapContext())
             {
-                XFactor = ActualWidth / WbImageData.BoundingRect.Width();
-                YFactor = ActualHeight / WbImageData.BoundingRect.Height();
+                XFactor = ActualWidth / ImageData.boundingRect.Width();
+                YFactor = ActualHeight / ImageData.boundingRect.Height();
 
-                foreach (var plotRectangle in WbImageData.FilledRectangles)
+                foreach (var plotRectangle in ImageData.filledRects)
                 {
                     _writeableBmp.FillRectangle(
-                            XWindow(plotRectangle.MinX, WbImageData.BoundingRect.MinX),
-                            YWindow(plotRectangle.MinY, ActualHeight, WbImageData.BoundingRect.MinY),
-                            XWindow(plotRectangle.MinX + plotRectangle.Width(), WbImageData.BoundingRect.MinX),
-                            YWindow(plotRectangle.MinY + plotRectangle.Height(), ActualHeight, WbImageData.BoundingRect.MinY),
+                            XWindow(plotRectangle.MinX, ImageData.boundingRect.MinX),
+                            YWindow(plotRectangle.MinY, ActualHeight, ImageData.boundingRect.MinY),
+                            XWindow(plotRectangle.MinX + plotRectangle.Width(), ImageData.boundingRect.MinX),
+                            YWindow(plotRectangle.MinY + plotRectangle.Height(), ActualHeight, ImageData.boundingRect.MinY),
                             plotRectangle.V
                         );
                 }
 
-                foreach (var plotRectangle in WbImageData.OpenRectangles)
+                foreach (var plotRectangle in ImageData.openRects)
                 {
                     _writeableBmp.DrawRectangle(
-                            XWindow(plotRectangle.MinX, WbImageData.BoundingRect.MinX),
-                            YWindow(plotRectangle.MinY, ActualHeight, WbImageData.BoundingRect.MinY),
-                            XWindow(plotRectangle.MinX + plotRectangle.Width(), WbImageData.BoundingRect.MinX),
-                            YWindow(plotRectangle.MinY + plotRectangle.Height(), ActualHeight, WbImageData.BoundingRect.MinY),
+                            XWindow(plotRectangle.MinX, ImageData.boundingRect.MinX),
+                            YWindow(plotRectangle.MinY, ActualHeight, ImageData.boundingRect.MinY),
+                            XWindow(plotRectangle.MinX + plotRectangle.Width(), ImageData.boundingRect.MinX),
+                            YWindow(plotRectangle.MinY + plotRectangle.Height(), ActualHeight, ImageData.boundingRect.MinY),
                             plotRectangle.V
                         );
                 }
 
-                foreach (var plotLine in WbImageData.PlotLines)
+                foreach (var plotLine in ImageData.plotLines)
                 {
                     _writeableBmp.DrawLineAa(
-                        XWindow(plotLine.X1, WbImageData.BoundingRect.MinX),
-                        YWindow(plotLine.Y1, ActualHeight, WbImageData.BoundingRect.MinY),
-                        XWindow(plotLine.X2, WbImageData.BoundingRect.MinX),
-                        YWindow(plotLine.Y2, ActualHeight, WbImageData.BoundingRect.MinY),
+                        XWindow(plotLine.X1, ImageData.boundingRect.MinX),
+                        YWindow(plotLine.Y1, ActualHeight, ImageData.boundingRect.MinY),
+                        XWindow(plotLine.X2, ImageData.boundingRect.MinX),
+                        YWindow(plotLine.Y2, ActualHeight, ImageData.boundingRect.MinY),
                         plotLine.V
                         );
                 }
 
 
-                foreach (var plotPoint in WbImageData.PlotPoints)
+                foreach (var plotPoint in ImageData.plotPoints)
                 {
                     _writeableBmp.FillRectangle(
-                        XWindow(plotPoint.X, WbImageData.BoundingRect.MinX),
-                        YWindow(plotPoint.Y, ActualHeight, WbImageData.BoundingRect.MinY),
-                        XWindow(plotPoint.X + 1, WbImageData.BoundingRect.MinX),
-                        YWindow(plotPoint.Y + 1, ActualHeight, WbImageData.BoundingRect.MinY),
+                        XWindow(plotPoint.X, ImageData.boundingRect.MinX),
+                        YWindow(plotPoint.Y, ActualHeight, ImageData.boundingRect.MinY),
+                        XWindow(plotPoint.X + 1, ImageData.boundingRect.MinX),
+                        YWindow(plotPoint.Y + 1, ActualHeight, ImageData.boundingRect.MinY),
                         plotPoint.V
                         );
                 }
@@ -171,8 +171,8 @@ namespace Cricket.View.Common
             var s = e.GetPosition(this);
             PointerPosition = new Point
             {
-                X = WbImageData.BoundingRect.MinX + s.X / XFactor,
-                Y = WbImageData.BoundingRect.MaxY - s.Y / YFactor
+                X = ImageData.boundingRect.MinX + s.X / XFactor,
+                Y = ImageData.boundingRect.MaxY - s.Y / YFactor
             };
         }
     }

@@ -65,16 +65,15 @@ namespace Cricket.ViewModel.Core
 
             var cursorFilter = FilterByCursor();
             var rectangler = MakeFilledRectangle();
-            WbImageVm.WbImageData = new WbImageData(
-                    boundingRect: new R<float>(Strides.Y, 0, 0, Strides.X), 
-                    imageWidth: WbImageVm.ControlWidth,
-                    imageHeight: WbImageVm.ControlHeight,
-                    openRects: MakeOpenRectangle(),
+            WbImageVm.ImageData = new ImageData(
+                    boundingRect: new R<float>(Strides.Y, 0, 0, Strides.X),
+                    imageSize: new Sz2<double>(WbImageVm.ControlWidth, WbImageVm.ControlHeight),
+                    openRects: MakeOpenRectangle().ToArray(),
                     filledRects: Values
                                     .Where(cursorFilter)
-                                    .Select(rectangler).ToList(),
-                    plotLines: new List<LS2V<float, Color>>(), 
-                    plotPoints: new List<P2V<float, Color>>()
+                                    .Select(rectangler).ToArray(),
+                    plotLines: new LS2V<float, Color>[0], 
+                    plotPoints: new P2V<float, Color>[0]
                 );
         }
 

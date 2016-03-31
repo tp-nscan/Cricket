@@ -49,9 +49,8 @@ namespace Cricket.ViewModel.Core
                 return;
             }
 
-            WbImageVm.WbImageData = new WbImageData(
-                    imageWidth: WbImageVm.ControlWidth,
-                    imageHeight: WbImageVm.ControlHeight,
+            WbImageVm.ImageData = Id.MakeImageData(
+                    imageSize: new Sz2<double>(WbImageVm.ControlWidth, WbImageVm.ControlHeight),
                     plotPoints: new List<P2V<float, Color>>(), 
                     filledRects: Values.Select(MakeRectangle).ToList(),
                     openRects: new List<RV<float, Color>>(), 

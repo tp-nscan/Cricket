@@ -2,6 +2,7 @@
 using System.Reactive.Subjects;
 using System.Windows;
 using Cricket.Common;
+using TT;
 
 namespace Cricket.ViewModel.Core
 {
@@ -15,11 +16,11 @@ namespace Cricket.ViewModel.Core
             = new Subject<Point>();
         public IObservable<Point> OnPointerChanged => _pointerChanged;
 
-        WbImageData _wbImageData;
-        public WbImageData WbImageData
+        ImageData _imageData;
+        public ImageData ImageData
         {
-            get { return _wbImageData; }
-            set { SetProperty(ref _wbImageData, value); }
+            get { return _imageData; }
+            set { SetProperty(ref _imageData, value); }
         }
 
         private Point _pointerPosition;

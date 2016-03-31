@@ -63,50 +63,50 @@ namespace Cricket.ViewModel.Core
 
         public void UpdateData(IEnumerable<P2<float>> values)
         {
-            if (EnforceBounds)
-            {
-                Values = values.Where(v=> XTUtils.IsInBox(v,Bounds))
-                            .ToList();
-            }
-            else
-            {
-                Values = values.ToList();
-                Bounds = XTUtils.BoundingBox(Values);
-            }
+            //if (EnforceBounds)
+            //{
+            //    Values = values.Where(v=> XTUtils.IsInBox(v,Bounds))
+            //                .ToList();
+            //}
+            //else
+            //{
+            //    Values = values.ToList();
+            //    Bounds = XTUtils.BoundingBox(Values);
+            //}
 
             UpdateGraphVm();
         }
 
         public void UpdateGraphVm()
         {
-            if( GraphVm.WbImageVm.ImageArea < 0.1)
-            {
-                return;
-            }
+            //if( GraphVm.WbImageVm.ImageArea < 0.1)
+            //{
+            //    return;
+            //}
 
-            if (XTUtils.Area(Bounds) < 0.1)
-            {
-                return;
-            }
+            //if (XTUtils.Area(Bounds) < 0.1)
+            //{
+            //    return;
+            //}
 
-            var binCounts = new P2<int>(
-                (int)(GraphVm.WbImageVm.ControlWidth / Sharpness), 
-                (int)(GraphVm.WbImageVm.ControlHeight / Sharpness));
+            //var binCounts = new P2<int>(
+            //    (int)(GraphVm.WbImageVm.ControlWidth / Sharpness), 
+            //    (int)(GraphVm.WbImageVm.ControlHeight / Sharpness));
 
-            var bins = Histos.Histogram2d(
-                bounds: Bounds,
-                binCount: binCounts,
-                vals: Values).ToColumnMajorOrder();
+            //var bins = Histos.Histogram2d(
+            //    bounds: Bounds,
+            //    binCount: binCounts,
+            //    vals: Values).ToColumnMajorOrder();
             
-            GraphVm.Watermark = $"Bins count: [{binCounts.X}, {binCounts.Y}]";
-            GraphVm.SetData(
-                imageWidth: GraphVm.WbImageVm.ControlWidth,
-                imageHeight: GraphVm.WbImageVm.ControlHeight,
-                boundingRect: Bounds.ToRectFloat(),
-                plotPoints: null,
-                plotLines: null,
-                filledRects: MakePlotRectangles(hist: bins),
-                openRects: null);
+            //GraphVm.Watermark = $"Bins count: [{binCounts.X}, {binCounts.Y}]";
+            //GraphVm.SetData(
+            //    imageWidth: GraphVm.WbImageVm.ControlWidth,
+            //    imageHeight: GraphVm.WbImageVm.ControlHeight,
+            //    boundingRect: Bounds.ToRectFloat(),
+            //    plotPoints: null,
+            //    plotLines: null,
+            //    filledRects: MakePlotRectangles(hist: bins),
+            //    openRects: null);
 
         }
 

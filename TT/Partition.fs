@@ -13,6 +13,12 @@ module GenSteps =
     let ExpStepTicsOne = ExpStepSeq 7.0 14.0 |> Seq.take(14) |> Seq.toArray
 
 
+    let UF32Tics256 =
+        {0.0f .. 255.0f} |> Seq.map(fun x-> x / 256.0f) |> Seq.toArray
+
+    let SF32Tics256 =
+        {0.0f .. 255.0f} |> Seq.map(fun x-> x / 128.0f - 1.0f) |> Seq.toArray
+
     let UF32to256 (value:float32) =
         (int (value * 255.99f))
 
@@ -30,33 +36,33 @@ module GenSteps =
 
     //Used to map [0.0, 1.0f] to [0 .. max-1]
 
-    let UniformUbTics max (value:float32) =
-        {0.0f .. max-1.0f} |> Seq.map(fun x-> x/max) |> Seq.toArray
-
-    let USqurdUbTics max (value:float32) =
-        {0.0f .. max-1.0f} |> Seq.map(fun x-> (x * x)/(max * max)) |> Seq.toArray
-
-    let USqurtUbTics max (value:float32) =
-        {0.0f .. max-1.0f} |> Seq.map(fun x-> (float32 (Math.Sqrt(float value))) / max) 
-                           |> Seq.toArray
-
-    let UniformUbMap (max:int) (value:float32) =
-        (int (value * (float32 max)))
-
-    let SqrdUbMap (max:int) (value:float32) =
-        (int (value * value * (float32 max)))
-
-    let SqrtUbMap (max:int) (value:float32) =
-        (int (Math.Sqrt(float value) * (float max)))
-
-    let UniformUbTo256 (max:int) (value:float32) =
-        UniformUbMap 256
-
-    let SqrdUbTo256 (max:int) (value:float32) =
-        SqrtUbMap 256
-
-    let SqrtUbTo256 (max:int) (value:float32) =
-        SqrtUbMap 256
+//    let UniformUbTics max (value:float32) =
+//        {0.0f .. max-1.0f} |> Seq.map(fun x-> x/max) |> Seq.toArray
+//
+//    let USqurdUbTics max (value:float32) =
+//        {0.0f .. max-1.0f} |> Seq.map(fun x-> (x * x)/(max * max)) |> Seq.toArray
+//
+//    let USqurtUbTics max (value:float32) =
+//        {0.0f .. max-1.0f} |> Seq.map(fun x-> (float32 (Math.Sqrt(float value))) / max) 
+//                           |> Seq.toArray
+//
+//    let UniformUbMap (max:int) (value:float32) =
+//        (int (value * (float32 max)))
+//
+//    let SqrdUbMap (max:int) (value:float32) =
+//        (int (value * value * (float32 max)))
+//
+//    let SqrtUbMap (max:int) (value:float32) =
+//        (int (Math.Sqrt(float value) * (float max)))
+//
+//    let UniformUbTo256 (max:int) (value:float32) =
+//        UniformUbMap 256
+//
+//    let SqrdUbTo256 (max:int) (value:float32) =
+//        SqrtUbMap 256
+//
+//    let SqrtUbTo256 (max:int) (value:float32) =
+//        SqrtUbMap 256
 
 
 module CT =
