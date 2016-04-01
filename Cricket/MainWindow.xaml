@@ -11,7 +11,15 @@
         <mui:LinkGroup DisplayName="welcome">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="home" Source="/View/Pages/Home.xaml" />
-                <mui:Link DisplayName="Sandbox" Source="/View/Pages/Sandbox.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="sandbox">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Graph" Source="/View/Pages/Sandbox/GraphPage.xaml" />
+                <mui:Link DisplayName="Grid2d" Source="/View/Pages/Sandbox/Grid2dPage.xaml" />
+                <mui:Link DisplayName="Grid4d" Source="/View/Pages/Sandbox/Grid4dPage.xaml" />
+                <mui:Link DisplayName="Hist1d" Source="/View/Pages/Sandbox/Hist1dPage.xaml" />
+                <mui:Link DisplayName="Hist2d" Source="/View/Pages/Sandbox/Hist2dPage.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
         <mui:LinkGroup DisplayName="settings" GroupKey="settings">

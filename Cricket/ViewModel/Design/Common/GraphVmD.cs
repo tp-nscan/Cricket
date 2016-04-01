@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-using Cricket.Graphics;
 using Cricket.ViewModel.Common;
 using TT;
 
@@ -27,15 +26,14 @@ namespace Cricket.ViewModel.Design.Common
         {
             get
             {
-                return ColorSequence.Dipolar(Colors.Red, Colors.Blue, 150)
-                    .Colors
-                    .ToList()
-                    .Select((c, i) => new P2V<float, Color>(
-                                        x: i,
-                                        y: i,
-                                        v: c
-                        )
-                     ).ToList();
+                return ColorSets.RedBlueSpan
+                        .ToList()
+                        .Select((c, i) => new P2V<float, Color>(
+                                            x: i,
+                                            y: i,
+                                            v: c
+                            )
+                         ).ToList();
             }
         }
 
@@ -43,8 +41,7 @@ namespace Cricket.ViewModel.Design.Common
         {
             get
             {
-                return ColorSequence.Dipolar(Colors.Red, Colors.Blue, 20)
-                    .Colors
+                return ColorSets.RedBlueSpan
                     .ToList()
                     .Select((c, i) => new RV<float, Color>(
                                         minX: 200-i*9,

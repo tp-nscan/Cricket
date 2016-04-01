@@ -2,11 +2,11 @@
 using Cricket.ViewModel.Common;
 using Cricket.ViewModel.Design.Common;
 
-namespace Cricket.ViewModel.Pages
+namespace Cricket.ViewModel.Pages.Sandbox
 {
-    public class SandboxPageVm : BindableBase
+    public class Grid2dPageVm : BindableBase
     {
-        public SandboxPageVm()
+        public Grid2dPageVm()
         {
             Grid2DVm = new Grid2DVmD();
         }

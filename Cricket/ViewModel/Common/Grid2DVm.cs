@@ -43,14 +43,8 @@ namespace Cricket.ViewModel.Common
             if (values == null) return;
 
             Values = values.ToList();
-
-            if (WbImageVm.ImageArea < 0.1)
-            {
-                return;
-            }
-
             WbImageVm.ImageData = Id.MakeImageData(
-                    imageSize: new Sz2<double>(WbImageVm.ControlWidth, WbImageVm.ControlHeight),
+                    imageSize: new Sz2<double>(-1.0, -1.0),
                     plotPoints: new List<P2V<float, Color>>(), 
                     filledRects: Values.Select(MakeRectangle).ToList(),
                     openRects: new List<RV<float, Color>>(), 

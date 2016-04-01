@@ -17,14 +17,14 @@ module GenSteps =
         {0.0f .. 255.0f} |> Seq.map(fun x-> x / 256.0f) |> Seq.toArray
 
     let SF32Tics256 =
-        {0.0f .. 255.0f} |> Seq.map(fun x-> x / 128.0f - 1.0f) |> Seq.toArray
+        {0.0f .. 255.0f} |> Seq.map(fun x-> x / 128.0f - 0.999f) |> Seq.toArray
 
     let UF32to256 (value:float32) =
         (int (value * 255.99f))
 
 
     let SF32to256 (value:float32) =
-        (int (value * 127.99f + 127.98f))
+        (int (value * 127.49f + 127.48f))
 
 
     let InvExpStep (div:float) (ofBase:float) (value:float) =

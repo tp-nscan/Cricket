@@ -54,17 +54,20 @@ namespace Cricket.View.Common
         private WriteableBitmap _writeableBmp;
         private void MakeBitmap()
         {
-            if ((ActualWidth < 1) || (ActualHeight < 1))
+            if ((ActualWidth < 1) || (ActualHeight < 1)) return;
+
+            if (ImageData == null) return;
+
+
+            if (ImageData.imageSize.X < 0.0)
             {
-                return;
+                _writeableBmp = BitmapFactory.New((int)ActualWidth, (int)ActualHeight);
+            }
+            else
+            {
+                _writeableBmp = BitmapFactory.New((int)ImageData.imageSize.X, (int)ImageData.imageSize.Y);
             }
 
-            if (ImageData == null)
-            {
-                return;
-            }
-
-            _writeableBmp = BitmapFactory.New((int)ImageData.imageSize.X, (int)ImageData.imageSize.Y);
             RootImage.Source = _writeableBmp;
 
             using (_writeableBmp.GetBitmapContext())
@@ -144,8 +147,7 @@ namespace Cricket.View.Common
 
         public static readonly DependencyProperty ControlWidthProperty =
             DependencyProperty.Register("ControlWidth", typeof(double), typeof(WbImage),
-                new PropertyMetadata(Double.NaN));
-
+                new PropertyMetadata(0.0));
 
         public double ControlHeight
         {
@@ -155,7 +157,7 @@ namespace Cricket.View.Common
 
         public static readonly DependencyProperty ControlHeightProperty =
             DependencyProperty.Register("ControlHeight", typeof(double), typeof(WbImage),
-                new PropertyMetadata(Double.NaN));
+                new PropertyMetadata(0.0));
 
         public Point PointerPosition
         {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 using Cricket.Common;
-using Cricket.Graphics;
 using TT;
 
 namespace Cricket.ViewModel.Common
@@ -16,7 +15,7 @@ namespace Cricket.ViewModel.Common
             Sharpness = sharpness;
             GraphVm = new GraphVm();
             Bounds = bounds;
-            ColorSelector = ColorFunc.WeatherChannel;
+           // ColorSelector = ColorFunc.WeatherChannel;
         }
 
         public Hist2DVm(int sharpness)
@@ -24,10 +23,10 @@ namespace Cricket.ViewModel.Common
             _enforceBounds = false;
             Sharpness = sharpness;
             GraphVm = new GraphVm();
-            ColorSelector = ColorFunc.WeatherChannel;
+            //ColorSelector = ColorFunc.WeatherChannel;
         }
 
-        Func<int, Color> ColorSelector { get; }
+       // Func<int, Color> ColorSelector { get; }
 
         public int Sharpness { get; }
 
@@ -113,15 +112,15 @@ namespace Cricket.ViewModel.Common
         private List<RV<float, Color>> MakePlotRectangles(
             IEnumerable<RV<float, int>> hist)
         {
-            return
-                hist.Select(
-                    v => new RV<float, Color>(
-                            minX: v.MinX,
-                            minY: v.MinY,
-                            maxX: v.MaxX,
-                            maxY: v.MaxY,
-                            v: ColorSelector(v.V)
-                        )).ToList();
+            return null;
+            //hist.Select(
+            //    v => new RV<float, Color>(
+            //            minX: v.MinX,
+            //            minY: v.MinY,
+            //            maxX: v.MaxX,
+            //            maxY: v.MaxY,
+            //            v: ColorSelector(v.V)
+            //        )).ToList();
         }
 
 

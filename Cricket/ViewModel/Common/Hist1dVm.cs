@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 using Cricket.Common;
-using Cricket.Graphics;
 using TT;
 
 namespace Cricket.ViewModel.Common
@@ -15,10 +14,8 @@ namespace Cricket.ViewModel.Common
             _enforceBounds = true;
             Sharpness = sharpness;
             GraphVm = new GraphVm();
-            ColorSteps = 256;
             MinValue = min;
             MaxValue = max;
-            Legend = Colors.White.ToUniformColorSequence((int)ColorSteps);
         }
 
         public Hist1DVm(int sharpness)
@@ -26,13 +23,7 @@ namespace Cricket.ViewModel.Common
             _enforceBounds = false;
             Sharpness = sharpness;
             GraphVm = new GraphVm();
-            ColorSteps = 256;
-            Legend = Colors.White.ToUniformColorSequence((int)ColorSteps);
         }
-
-        public IColorSequence Legend { get; }
-
-        public float ColorSteps { get; }
 
         public int Sharpness { get; }
 
@@ -110,14 +101,14 @@ namespace Cricket.ViewModel.Common
                 imageWidth: GraphVm.WbImageVm.ControlWidth,
                 imageHeight: GraphVm.WbImageVm.ControlHeight,
                 boundingRect: new R<float>(maxY:maxFreq, minX: MinValue, minY: 0.0f, maxX: MaxValue),
-                plotPoints: null,
-                plotLines: null,
+                plotPoints: Enumerable.Empty<P2V<float,Color>>(),
+                plotLines: Enumerable.Empty<LS2V<float, Color>>(),
                 filledRects: MakePlotRectangles(hist: bins),
-                openRects: null );
+                openRects: Enumerable.Empty<RV<float, Color>>());
         }
 
 
-        static List<RV<float, Color>> MakePlotRectangles(
+        static IEnumerable<RV<float, Color>> MakePlotRectangles(
             IEnumerable<IV<float,int>> hist)
         {
             return 
@@ -128,7 +119,7 @@ namespace Cricket.ViewModel.Common
                             maxX: v.Max,
                             maxY: v.V,
                             v: Colors.Aqua
-                        )).ToList();
+                        ));
         }
 
     }

@@ -112,15 +112,15 @@
     <Compile Include="Common\Converters\AdditionConverter.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\StringFormats.cs" />
-    <Compile Include="Graphics\BrushSequence.cs" />
-    <Compile Include="Graphics\ColorEx.cs" />
-    <Compile Include="Graphics\ColorMap.cs" />
-    <Compile Include="Graphics\ColorSequence.cs" />
-    <Compile Include="Graphics\EnumerableExt.cs" />
+    <Compile Include="Common\ColorEx.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Pages\Sandbox\GraphPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Common\GraphControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -145,7 +145,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Pages\Sandbox.xaml">
+    <Page Include="View\Pages\Sandbox\Grid2dPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Pages\Sandbox\Grid4dPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Pages\Sandbox\Hist1dPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Pages\Sandbox\Hist2dPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -153,7 +165,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="ViewModel\Pages\SandboxPageVm.cs" />
+    <Compile Include="ViewModel\Pages\Sandbox\GraphPageVm.cs" />
+    <Compile Include="ViewModel\Pages\Sandbox\Grid4dPageVm.cs" />
+    <Compile Include="ViewModel\Pages\Sandbox\Hist1dPageVm.cs" />
+    <Compile Include="ViewModel\Pages\Sandbox\Hist2dPageVm.cs" />
+    <Compile Include="View\Pages\Sandbox\GraphPage.xaml.cs">
+      <DependentUpon>GraphPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\Pages\Sandbox\Grid2dPageVm.cs" />
     <Compile Include="View\Common\GraphControl.xaml.cs">
       <DependentUpon>GraphControl.xaml</DependentUpon>
     </Compile>
@@ -172,8 +191,17 @@
     <Compile Include="View\Common\WbImage.xaml.cs">
       <DependentUpon>WbImage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Pages\Sandbox.xaml.cs">
-      <DependentUpon>Sandbox.xaml</DependentUpon>
+    <Compile Include="View\Pages\Sandbox\Grid2dPage.xaml.cs">
+      <DependentUpon>Grid2dPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\Sandbox\Grid4dPage.xaml.cs">
+      <DependentUpon>Grid4dPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\Sandbox\Hist1dPage.xaml.cs">
+      <DependentUpon>Hist1dPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\Sandbox\Hist2dPage.xaml.cs">
+      <DependentUpon>Hist2dPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Pages\Settings\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>

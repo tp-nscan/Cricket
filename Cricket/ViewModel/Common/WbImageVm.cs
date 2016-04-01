@@ -56,6 +56,6 @@ namespace Cricket.ViewModel.Common
             }
         }
 
-        public double ImageArea => ControlWidth* ControlHeight;
+        public double ImageArea => ControlWidth * ControlHeight;
     }
 }

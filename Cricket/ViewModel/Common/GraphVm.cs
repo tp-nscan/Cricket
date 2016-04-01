@@ -18,10 +18,10 @@ namespace Cricket.ViewModel.Common
         public void SetData(
             double imageWidth,
             double imageHeight,
-            List<P2V<float,Color>> plotPoints,
-            List<LS2V<float, Color>> plotLines,
-            List<RV<float, Color>> filledRects,
-            List<RV<float, Color>> openRects
+            IEnumerable<P2V<float,Color>> plotPoints,
+            IEnumerable<LS2V<float, Color>> plotLines,
+            IEnumerable<RV<float, Color>> filledRects,
+            IEnumerable<RV<float, Color>> openRects
         )
         {
             WbImageVm.ImageData = Id.MakeImageData(
@@ -32,10 +32,10 @@ namespace Cricket.ViewModel.Common
                     plotLines: plotLines
                 );
 
-            MinX = (float) WbImageVm.ImageData.boundingRect.MinX;
-            MinY = (float) WbImageVm.ImageData.boundingRect.MinY;
-            MaxX = (float) WbImageVm.ImageData.boundingRect.MaxX;
-            MaxY = (float) WbImageVm.ImageData.boundingRect.MaxY;
+            MinX = WbImageVm.ImageData.boundingRect.MinX;
+            MinY = WbImageVm.ImageData.boundingRect.MinY;
+            MaxX = WbImageVm.ImageData.boundingRect.MaxX;
+            MaxY = WbImageVm.ImageData.boundingRect.MaxY;
         }
 
         public void SetData(

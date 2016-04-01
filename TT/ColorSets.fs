@@ -84,9 +84,9 @@ module ColorSets =
         
 
     let RedBlueSigned =
-        { minC=Colors.HotPink; maxC=Colors.Green; 
+        { minC=Colors.Black; maxC=Colors.Green; 
           spanC=RedBlueSpan; mapper=GenSteps.SF32to256; 
-          minV= -0.999f; maxV=0.999f; tics=GenSteps.SF32Tics256 }
+          minV= -1.0f; maxV=0.999f; tics=GenSteps.SF32Tics256 }
 
 
     // Exp distributes 14 colors over the range [1, 196]

@@ -10,7 +10,7 @@ namespace Cricket.ViewModel.Design.Common
             UpdateData(DesignData.Grid2DTestData(TestStrides));
         }
 
-        public static Sz2<int> TestStrides = new Sz2<int>(10,15);
+        public static Sz2<int> TestStrides = new Sz2<int>(30,15);
         
     }
 }
