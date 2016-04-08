@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using Cricket.ViewModel.Pages.Sandbox;
 using FirstFloor.ModernUI.Windows;
-using FirstFloor.ModernUI.Windows.Controls;
 using FirstFloor.ModernUI.Windows.Navigation;
 
 namespace Cricket.View.Pages.Sandbox

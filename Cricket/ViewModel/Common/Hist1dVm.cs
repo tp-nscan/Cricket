@@ -9,23 +9,32 @@ namespace Cricket.ViewModel.Common
 {
     public class Hist1DVm : BindableBase
     {
-        public Hist1DVm(float min, float max, int sharpness)
+        public Hist1DVm(float min, float max, int binCount)
         {
             _enforceBounds = true;
-            Sharpness = sharpness;
+            BinCount = binCount;
             GraphVm = new GraphVm();
             MinValue = min;
             MaxValue = max;
         }
 
-        public Hist1DVm(int sharpness)
+        public Hist1DVm(int binCount)
         {
             _enforceBounds = false;
-            Sharpness = sharpness;
+            BinCount = binCount;
             GraphVm = new GraphVm();
         }
 
-        public int Sharpness { get; }
+        private int _binCount;
+        public int BinCount
+        {
+            get { return _binCount; }
+            set
+            {
+                SetProperty(ref _binCount, value);
+                UpdateGraphVm();
+            }
+        }
 
         public float MinValue { get; private set; }
 
@@ -41,10 +50,6 @@ namespace Cricket.ViewModel.Common
             set
             {
                 SetProperty(ref _graphVm, value);
-                _szChangedSubscr?.Dispose();
-                _szChangedSubscr =
-                    _graphVm.WbImageVm.OnSizeChanged
-                        .Subscribe(sz => UpdateData(Values));
             }
         }
 
@@ -73,13 +78,6 @@ namespace Cricket.ViewModel.Common
                 MinValue = Values.Min();
                 MaxValue = Values.Max();
             }
-
-            if ((GraphVm == null) || (GraphVm.WbImageVm.ControlHeight < 1) 
-                                  || (GraphVm.WbImageVm.ControlWidth < 1))
-            {
-                return;
-            }
-
             UpdateGraphVm();
         }
 
@@ -87,19 +85,17 @@ namespace Cricket.ViewModel.Common
         {
             if (Values==null) return;
 
-            var binCount = (int) (GraphVm.WbImageVm.ControlWidth / Sharpness);
             var bins = Histos.Histogram1d(
                 min: MinValue, 
                 max: MaxValue, 
                 vals: Values, 
-                binCount: binCount);
+                binCount: BinCount);
 
             var maxFreq = bins.Max(p => p.V);
-
-            GraphVm.Watermark = "Bin count: " + binCount;
+            
             GraphVm.SetData(
-                imageWidth: GraphVm.WbImageVm.ControlWidth,
-                imageHeight: GraphVm.WbImageVm.ControlHeight,
+                imageWidth: -1.0,
+                imageHeight: -1.0,
                 boundingRect: new R<float>(maxY:maxFreq, minX: MinValue, minY: 0.0f, maxX: MaxValue),
                 plotPoints: Enumerable.Empty<P2V<float,Color>>(),
                 plotLines: Enumerable.Empty<LS2V<float, Color>>(),

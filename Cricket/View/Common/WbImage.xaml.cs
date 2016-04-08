@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Net.Mail;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Cricket.Common;
 using TT;
@@ -16,8 +18,6 @@ namespace Cricket.View.Common
 
         private void WbImage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            ControlWidth = ActualWidth;
-            ControlHeight = ActualHeight;
             MakeBitmap();
         }
 
@@ -74,14 +74,16 @@ namespace Cricket.View.Common
             {
                 XFactor = ActualWidth / ImageData.boundingRect.Width();
                 YFactor = ActualHeight / ImageData.boundingRect.Height();
+                var minX = ImageData.boundingRect.MinX;
+                var minY = ImageData.boundingRect.MinY;
 
                 foreach (var plotRectangle in ImageData.filledRects)
                 {
                     _writeableBmp.FillRectangle(
-                            XWindow(plotRectangle.MinX, ImageData.boundingRect.MinX),
-                            YWindow(plotRectangle.MinY, ActualHeight, ImageData.boundingRect.MinY),
-                            XWindow(plotRectangle.MinX + plotRectangle.Width(), ImageData.boundingRect.MinX),
-                            YWindow(plotRectangle.MinY + plotRectangle.Height(), ActualHeight, ImageData.boundingRect.MinY),
+                            XWindow(plotRectangle.MinX, minX),
+                            YWindow(plotRectangle.MinY, ActualHeight, minY),
+                            XWindow(plotRectangle.MinX + plotRectangle.Width(), minX),
+                            YWindow(plotRectangle.MinY + plotRectangle.Height(), ActualHeight, minY),
                             plotRectangle.V
                         );
                 }
@@ -89,10 +91,10 @@ namespace Cricket.View.Common
                 foreach (var plotRectangle in ImageData.openRects)
                 {
                     _writeableBmp.DrawRectangle(
-                            XWindow(plotRectangle.MinX, ImageData.boundingRect.MinX),
-                            YWindow(plotRectangle.MinY, ActualHeight, ImageData.boundingRect.MinY),
-                            XWindow(plotRectangle.MinX + plotRectangle.Width(), ImageData.boundingRect.MinX),
-                            YWindow(plotRectangle.MinY + plotRectangle.Height(), ActualHeight, ImageData.boundingRect.MinY),
+                            XWindow(plotRectangle.MinX, minX),
+                            YWindow(plotRectangle.MinY, ActualHeight, minY),
+                            XWindow(plotRectangle.MinX + plotRectangle.Width(), minX),
+                            YWindow(plotRectangle.MinY + plotRectangle.Height(), ActualHeight, minY),
                             plotRectangle.V
                         );
                 }
@@ -100,10 +102,10 @@ namespace Cricket.View.Common
                 foreach (var plotLine in ImageData.plotLines)
                 {
                     _writeableBmp.DrawLineAa(
-                        XWindow(plotLine.X1, ImageData.boundingRect.MinX),
-                        YWindow(plotLine.Y1, ActualHeight, ImageData.boundingRect.MinY),
-                        XWindow(plotLine.X2, ImageData.boundingRect.MinX),
-                        YWindow(plotLine.Y2, ActualHeight, ImageData.boundingRect.MinY),
+                        XWindow(plotLine.X1, minX),
+                        YWindow(plotLine.Y1, ActualHeight, minY),
+                        XWindow(plotLine.X2, minX),
+                        YWindow(plotLine.Y2, ActualHeight, minY),
                         plotLine.V
                         );
                 }
@@ -112,10 +114,10 @@ namespace Cricket.View.Common
                 foreach (var plotPoint in ImageData.plotPoints)
                 {
                     _writeableBmp.FillRectangle(
-                        XWindow(plotPoint.X, ImageData.boundingRect.MinX),
-                        YWindow(plotPoint.Y, ActualHeight, ImageData.boundingRect.MinY),
-                        XWindow(plotPoint.X + 1, ImageData.boundingRect.MinX),
-                        YWindow(plotPoint.Y + 1, ActualHeight, ImageData.boundingRect.MinY),
+                        XWindow(plotPoint.X, minX),
+                        YWindow(plotPoint.Y, ActualHeight, minY),
+                        XWindow(plotPoint.X + 1, minX),
+                        YWindow(plotPoint.Y + 1, ActualHeight, minY),
                         plotPoint.V
                         );
                 }
@@ -138,26 +140,6 @@ namespace Cricket.View.Common
         {
             return (int)(imageHeight - (yVal - minY) * YFactor);
         }
-
-        public double ControlWidth
-        {
-            get { return (double)GetValue(ControlWidthProperty); }
-            set { SetValue(ControlWidthProperty, value); }
-        }
-
-        public static readonly DependencyProperty ControlWidthProperty =
-            DependencyProperty.Register("ControlWidth", typeof(double), typeof(WbImage),
-                new PropertyMetadata(0.0));
-
-        public double ControlHeight
-        {
-            get { return (double)GetValue(ControlHeightProperty); }
-            set { SetValue(ControlHeightProperty, value); }
-        }
-
-        public static readonly DependencyProperty ControlHeightProperty =
-            DependencyProperty.Register("ControlHeight", typeof(double), typeof(WbImage),
-                new PropertyMetadata(0.0));
 
         public Point PointerPosition
         {

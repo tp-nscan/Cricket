@@ -9,32 +9,60 @@ namespace Cricket.ViewModel.Common
 {
     public class Hist2DVm : BindableBase
     {
-        public Hist2DVm(int sharpness, R<float> bounds)
+        public Hist2DVm(Sz2<int> binCounts, R<float> bounds,
+                        Func<int[], ColorLeg<int>> colorLegger, 
+                        string title = "")
         {
             _enforceBounds = true;
-            Sharpness = sharpness;
-            GraphVm = new GraphVm();
+            BinCounts = new Sz2IntVm(binCounts);
             Bounds = bounds;
-           // ColorSelector = ColorFunc.WeatherChannel;
+            ColorLegger = colorLegger;
+            GraphVm = new GraphVm();
         }
 
-        public Hist2DVm(int sharpness)
+        public Hist2DVm(Sz2<int> binCounts,
+                        Func<int[], ColorLeg<int>> colorLegger, 
+                        string title = "")
         {
             _enforceBounds = false;
-            Sharpness = sharpness;
+            BinCounts = new Sz2IntVm(binCounts);
+            ColorLegger = colorLegger;
             GraphVm = new GraphVm();
-            //ColorSelector = ColorFunc.WeatherChannel;
         }
 
-       // Func<int, Color> ColorSelector { get; }
 
-        public int Sharpness { get; }
+        private IDisposable _xSelectorSubscr;
+        private Sz2IntVm _binCounts;
+        public Sz2IntVm BinCounts
+        {
+            get { return _binCounts; }
+            set
+            {
+                SetProperty(ref _binCounts, value);
+                _xSelectorSubscr?.Dispose();
+                _xSelectorSubscr =
+                    _binCounts.OnSizeChanged
+                        .Subscribe(sz => UpdateGraphVm());
+                UpdateGraphVm();
+            }
+        }
+
+        public Func<int[], ColorLeg<int>> ColorLegger { get; }
 
         public R<float> Bounds { get; private set; }
 
-        public List<P2<float>> Values { get; private set; }
+        public P2<float>[] Values { get; private set; }
 
-        private IDisposable _szChangedSubscr;
+        private LegendVm _legendVm;
+        public LegendVm LegendVm
+        {
+            get { return _legendVm; }
+            set
+            {
+                SetProperty(ref _legendVm, value);
+            }
+        }
+
         private GraphVm _graphVm;
         public GraphVm GraphVm
         {
@@ -42,10 +70,6 @@ namespace Cricket.ViewModel.Common
             set
             {
                 SetProperty(ref _graphVm, value);
-                _szChangedSubscr?.Dispose();
-                _szChangedSubscr =
-                    _graphVm.WbImageVm.OnSizeChanged
-                        .Subscribe(sz => UpdateData(Values));
             }
         }
 
@@ -62,65 +86,63 @@ namespace Cricket.ViewModel.Common
 
         public void UpdateData(IEnumerable<P2<float>> values)
         {
-            //if (EnforceBounds)
-            //{
-            //    Values = values.Where(v=> XTUtils.IsInBox(v,Bounds))
-            //                .ToList();
-            //}
-            //else
-            //{
-            //    Values = values.ToList();
-            //    Bounds = XTUtils.BoundingBox(Values);
-            //}
+            if (EnforceBounds)
+            {
+                Values = BT.FilterRP(Bounds, values).ToArray();
+            }
+            else
+            {
+                Values = values.ToArray();
+                Bounds = BT.BoundRectP2F32(Values);
+            }
 
             UpdateGraphVm();
         }
 
         public void UpdateGraphVm()
         {
-            //if( GraphVm.WbImageVm.ImageArea < 0.1)
-            //{
-            //    return;
-            //}
+            if (Values == null) return;
 
-            //if (XTUtils.Area(Bounds) < 0.1)
-            //{
-            //    return;
-            //}
+            var bins = A2dUt.ToP2V(Histos.Histogram2d(
+                bounds: Bounds,
+                binCount: BinCounts.Sz2Int,
+                vals: Values)).ToArray();
 
-            //var binCounts = new P2<int>(
-            //    (int)(GraphVm.WbImageVm.ControlWidth / Sharpness), 
-            //    (int)(GraphVm.WbImageVm.ControlHeight / Sharpness));
+            var counts = bins.Select(b => b.V.V).ToArray();
+            var colorLeg = ColorLegger(counts);
+            LegendVm = new LegendVm(
+                minVal: "<" + colorLeg.minV,
+                midVal: ColorSets.GetLegMidVal(colorLeg).ToString(),
+                maxVal: ">" + colorLeg.maxV,
+                minCol: colorLeg.minC,
+                midColors: colorLeg.spanC,
+                maxColor: colorLeg.maxC
+                );
 
-            //var bins = Histos.Histogram2d(
-            //    bounds: Bounds,
-            //    binCount: binCounts,
-            //    vals: Values).ToColumnMajorOrder();
-            
-            //GraphVm.Watermark = $"Bins count: [{binCounts.X}, {binCounts.Y}]";
-            //GraphVm.SetData(
-            //    imageWidth: GraphVm.WbImageVm.ControlWidth,
-            //    imageHeight: GraphVm.WbImageVm.ControlHeight,
-            //    boundingRect: Bounds.ToRectFloat(),
-            //    plotPoints: null,
-            //    plotLines: null,
-            //    filledRects: MakePlotRectangles(hist: bins),
-            //    openRects: null);
+            GraphVm.Watermark = $"Bins count: [{BinCounts.X}, {BinCounts.Y}]";
+            GraphVm.SetData(
+                imageWidth: -1.0,
+                imageHeight: -1.0,
+                boundingRect: Bounds,
+                plotPoints: Enumerable.Empty<P2V<float, Color>>(),
+                plotLines: Enumerable.Empty<LS2V<float, Color>>(),
+                filledRects: MakePlotRectangles(colorLeg: colorLeg, hist: bins),
+                openRects: Enumerable.Empty<RV<float, Color>>());
 
         }
 
         private List<RV<float, Color>> MakePlotRectangles(
-            IEnumerable<RV<float, int>> hist)
+            ColorLeg<int> colorLeg,
+            IEnumerable<P2V<int, RV<float, int>>> hist)
         {
-            return null;
-            //hist.Select(
-            //    v => new RV<float, Color>(
-            //            minX: v.MinX,
-            //            minY: v.MinY,
-            //            maxX: v.MaxX,
-            //            maxY: v.MaxY,
-            //            v: ColorSelector(v.V)
-            //        )).ToList();
+            return hist.Select(
+                v => new RV<float, Color>(
+                        minX: v.V.MinX,
+                        minY: v.V.MinY,
+                        maxX: v.V.MaxX,
+                        maxY: v.V.MaxY,
+                        v: ColorSets.GetLegColor(colorLeg, v.V.V)
+                    )).ToList();
         }
 
 

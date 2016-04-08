@@ -2,6 +2,7 @@
 
 type P2<'c>  = { X:'c; Y:'c }
 type Sz2<'c>  = { X:'c; Y:'c }
+type Sz4<'c>  = { X1:'c; Y1:'c; X2:'c; Y2:'c }
 type P3<'c>  = { X:'c; Y:'c; Z:'c }
 type I<'c>  = { Min:'c; Max:'c }
 type R<'c>  = { MinX:'c; MaxX:'c; MinY:'c; MaxY:'c } 
@@ -165,7 +166,7 @@ module BT =
        ((^a : (member MaxY : ^b) range) - (^a : (member MinY : ^b) range))
 
 
-    let inline InR (range:^a when 
+    let inline InRP (range:^a when 
                         ^a:(member MinX : ^b) and ^a:(member MaxX : ^b) 
                         and
                         ^a:(member MinY : ^b) and ^a:(member MaxY : ^b)
@@ -206,6 +207,13 @@ module BT =
             MaxY   = if (box.MaxY < (^c : (member Y : ^b) p2)) then (^c : (member Y : ^b) p2) else box.MaxY
         }
 
+    let inline StretchRPF32 (box:R<float32>) (p2:P2<float32>) =
+        { 
+            R.MinX = if (box.MinX > p2.X) then p2.X else box.MinX
+            MaxX   = if (box.MaxX < p2.X) then p2.X else box.MaxX
+            MinY   = if (box.MinY > p2.Y) then p2.Y else box.MinY
+            MaxY   = if (box.MaxY < p2.Y) then p2.Y else box.MaxY
+        }
 
     let inline StretchRR (box:R< ^b>) 
                            (rect:^c when ^c:(member MinX : ^b) and ^c:(member MaxX : ^b) 
@@ -229,8 +237,16 @@ module BT =
         }
 
 
+    let inline FilterRP (box:R< ^b>) (p2:seq< ^c> when ^c:(member X : ^b) and ^c:(member Y : ^b) ) =
+            p2 |> Seq.filter(fun p -> InRP box p)
+
+
     let inline BoundingRP (box:R< ^b>) (p2:seq< ^c> when ^c:(member X : ^b) and ^c:(member Y : ^b) ) =
             p2 |> Seq.fold (fun acc elem -> StretchRP acc elem ) box
+
+
+    let inline BoundRectP2F32 p2s =
+            p2s |> Array.fold(fun acc p -> StretchRPF32 acc p ) AntiRofF32 
 
 
     let inline BoundingRR (box:R< ^b>) 
@@ -285,6 +301,13 @@ module AUt =
 
 
 module A2dUt = 
+
+    let Raster2d (strides:Sz2<int>) =
+        seq { for col in 0 .. strides.X - 1 do
+                for row in 0 .. strides.Y - 1 do
+                    yield {P2.X= col; Y= row;}
+            }
+        
 
     let SymRowMajorIndex x y =
         if (x >= y) then x*(x+1)/2 + y
@@ -363,6 +386,20 @@ module A2dUt =
 
 
     let getRow r (A:_[,]) = A.[r,*] |> Seq.toArray
+
+
+    let P2sForA2d (rowCt:int) (colCt:int) =
+        seq { for row in 0 .. rowCt - 1 do
+                for col in 0 .. colCt - 1 do
+                    yield {P2.X = col; Y=row; }
+        }
+
+
+    let ToP2V (a2d:'a[,]) =
+        seq { for row in 0 .. (a2d.GetLength 0) - 1 do
+                for col in 0 .. (a2d.GetLength 1) - 1 do
+                    yield {P2V.X = col; Y=row; V= a2d.[row, col]}
+            }
 
 
 module SeqUt = 

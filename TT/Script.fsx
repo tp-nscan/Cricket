@@ -56,33 +56,39 @@
 //    res <- BT.StretchRP rect pt
 
 //
-//#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll"
-//#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.FSharp.3.7.0\lib\net40\MathNet.Numerics.FSharp.dll"
-//#r @"C:\Users\tpnsc_000\Documents\GitHub\HopAlong\Utils\bin\Debug\Utils.dll"
-//
-//open System
-//open MathNet.Numerics
-//open MathNet.Numerics.Distributions
-//open MathNet.Numerics.LinearAlgebra
-//open MathNet.Numerics.Random
-//
-//#load "BT.fs"
-//#load "Gen.fs"
-//open TT
-//
-//BTmap.TestI 123 33 |> Seq.toArray
+#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll"
+#r @"C:\Users\tpnsc_000\Documents\GitHub\DonutDevil\packages\MathNet.Numerics.FSharp.3.7.0\lib\net40\MathNet.Numerics.FSharp.dll"
+#r @"C:\Users\tpnsc_000\Documents\GitHub\HopAlong\Utils\bin\Debug\Utils.dll"
 
-//BTmap.TestR 123 33 |> Seq.toArray
+open System
+open MathNet.Numerics
+open MathNet.Numerics.Distributions
+open MathNet.Numerics.LinearAlgebra
+open MathNet.Numerics.Random
 
-//let k = BTmap.TestLS2 123 3 |> Seq.toArray
+#load "BT.fs"
+#load "Gen.fs"
+open TT
 
-//let k = BTmap.TestI 123 3333 
+//let k = (GenBT.TestP2 123 230) |> Seq.toArray
+//k |> Seq.toArray
+(GenBT.TestP2 12 150000) |> Seq.toArray |> BT.BoundingRP BT.AntiRofF32
+
+
+//
+//GenBT.TestI 123 33 |> Seq.toArray
+
+//GenBT.TestR 123 33 |> Seq.toArray
+
+//let k = GenBT.TestLS2 123 3 |> Seq.toArray
+
+//let k = GenBT.TestI 123 3333 
 //k |> BT.BoundingII BT.AntiIofS
 
-//let k = BTmap.TestF32 123 3333 
+//let k = GenBT.TestF32 123 3333 
 //k |> BT.BoundingIP BT.AntiIofS
 
-//let k = BTmap.TestR 123 3333 
+//let k = GenBT.TestR 123 3333 
 //k |> BT.BoundingRR BT.AntiRofF32
 
 
@@ -130,7 +136,7 @@
 //let res = CT.TileInterval {I.Min=1.0f; Max=3.7f } 4 |> Seq.toArray
 //
 //let sq =  seq {0.0f .. 10000000.0f }
-//let res = sq |> BTmap.IofSeq |> Seq.take(100) |> Seq.toArray
+//let res = sq |> GenBT.IofSeq |> Seq.take(100) |> Seq.toArray
 
 
 //let mutable res = sq |> SeqUt.SeqToI |> Seq.take(100) |> Seq.toArray
@@ -168,8 +174,6 @@ ColorSets.QuadColorRing 2 Colors.Black Colors.White Colors.Red Colors.Blue |> Se
 //
 //let std = st |> Array.map(fun x-> x - 0.1)
 //
-//let stB = st |> Array.map(fun x-> GenSteps.InvExpStepOne(x))
-//
 //
 //let tf a =
 //    let la = Math.Log a
@@ -188,7 +192,7 @@ ColorSets.QuadColorRing 2 Colors.Black Colors.White Colors.Red Colors.Blue |> Se
 //#r @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\PresentationCore.dll"
 //
 //#load "BT.fs"
-//#load "BTmap.fs"
+//#load "GenBT.fs"
 //#load "Gen.fs"
 //
 //open TT
@@ -212,7 +216,7 @@ ColorSets.QuadColorRing 2 Colors.Black Colors.White Colors.Red Colors.Blue |> Se
 //#r @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\PresentationCore.dll"
 //
 //#load "BT.fs"
-//#load "BTmap.fs"
+//#load "GenBT.fs"
 //#load "Gen.fs"
 //
 //open TT
@@ -236,14 +240,29 @@ ColorSets.QuadColorRing 2 Colors.Black Colors.White Colors.Red Colors.Blue |> Se
 #r @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\PresentationCore.dll"
 
 #load "BT.fs"
-#load "BTmap.fs"
 #load "Gen.fs"
 #load "Partition.fs"
 #load "DesignData.fs"
-
+#load "Grid2dCnxn.fs"
 open TT
+
+
+let UniformStar (strides:Sz2<int>) = 
+    let uniCon x y = 1.0f
+    Grid2dCnxn.AllLS2Vs strides Grid2dCnxn.StarNbrs (fun x y -> 1.0f)
+    |> Seq.toArray
+
+
+UniformStar {Sz2.X=5; Y=4}
+
+Grid2dCnxn.AllOffsets {Sz2.X=5; Y=4} Grid2dCnxn.StarNbrs |> Seq.toArray
+
+
+A2dUt.Raster2d {Sz2.X=5; Y=4} |> Seq.toArray
+
+
 
 (DesignData.Grid2DTestData {Sz2.X=10; Sz2.Y=15}) |> Seq.toArray
 
-(CT.Raster2d {Sz2.X=4; Sz2.Y=4}) |> Seq.toArray
+(A2dUt.Raster2d {Sz2.X=4; Sz2.Y=4}) |> Seq.toArray
 

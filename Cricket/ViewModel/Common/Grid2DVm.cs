@@ -16,8 +16,7 @@ namespace Cricket.ViewModel.Common
             WbImageVm = new WbImageVm();
             Title = title;
         }
-
-        private IDisposable _szChangedSubscr;
+        
         private WbImageVm _wbImageVm;
         public WbImageVm WbImageVm
         {
@@ -25,10 +24,6 @@ namespace Cricket.ViewModel.Common
             set
             {
                 SetProperty(ref _wbImageVm, value);
-                _szChangedSubscr?.Dispose();
-                _szChangedSubscr =
-                    _wbImageVm.OnSizeChanged
-                        .Subscribe(sz => UpdateData(Values));
             }
         }
 
@@ -59,7 +54,7 @@ namespace Cricket.ViewModel.Common
                     minY: v.Y,
                     maxX: v.X + 1.0f,
                     maxY: v.Y + 1.0f,
-                    v: ColorSets.GetColor(ColorLeg, v.V)
+                    v: ColorSets.GetLegColor(ColorLeg, v.V)
                 );
         }
 

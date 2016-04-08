@@ -14,7 +14,7 @@
     <Border BorderThickness="1" BorderBrush="Gray">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*"/>
+                <RowDefinition Height="3*" MinHeight="20"/>
                 <RowDefinition Height="50*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition MinHeight="25" MaxHeight="25" Height="2*"/>
@@ -34,8 +34,6 @@
                     Grid.Column="2">
 
                 <common:WbImage x:Name="wbImage"
-                    ControlHeight = "{Binding WbImageVm.ControlHeight, Mode=TwoWay}"
-                    ControlWidth = "{Binding WbImageVm.ControlWidth, Mode=TwoWay}"
                     PointerPosition ="{Binding WbImageVm.PointerPosition, Mode=TwoWay}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
@@ -50,12 +48,12 @@
                 </StackPanel>
             </Viewbox>
 
-            <StackPanel HorizontalAlignment="Right" Grid.Column="2" Grid.Row="1" Orientation="Horizontal">
+            <StackPanel HorizontalAlignment="Right" Grid.Column="2" Grid.Row="0" Orientation="Horizontal">
                 <TextBlock Text="{Binding Watermark}" FontSize="13.333" />
             </StackPanel>
-            
+
             <Viewbox VerticalAlignment="Bottom" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Margin="0,0,0,5" Stretch="Uniform" >
-                <TextBlock Text="0.000" />
+                <TextBlock Text="{Binding MinStrX}" />
             </Viewbox>
 
             <Viewbox Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" VerticalAlignment="Top" Margin="0,5,0,0" Stretch="Uniform">
@@ -74,7 +72,16 @@
                 <!--<Viewbox.RenderTransform>
                     <CompositeTransform Rotation="90" ScaleX="2.5" ScaleY="2.5"/>
                 </Viewbox.RenderTransform>-->
-                <TextBlock  Text="{Binding TitleY}" />
+                <TextBlock  Text="{Binding TitleY}" RenderTransformOrigin="0.5,0.5" >
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="2.5" ScaleY="2.5"/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
             </Viewbox>
 
             <Viewbox Grid.Column="2" Grid.Row="3" HorizontalAlignment="Right" Stretch="Uniform" Grid.ColumnSpan="2">

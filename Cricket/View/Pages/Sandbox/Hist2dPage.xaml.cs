@@ -1,4 +1,5 @@
-﻿using Cricket.ViewModel.Pages.Sandbox;
+﻿using Cricket.ViewModel.Design.Common;
+using Cricket.ViewModel.Pages.Sandbox;
 using FirstFloor.ModernUI.Windows;
 using FirstFloor.ModernUI.Windows.Navigation;
 

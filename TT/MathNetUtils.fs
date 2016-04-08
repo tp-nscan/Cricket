@@ -8,7 +8,7 @@ open MathNet.Numerics.LinearAlgebra.Matrix
 open BT
 open GenV
 open GenS
-open BTmap
+open GenBT
 
 module VecUt =
 

@@ -14,19 +14,27 @@
     <Border BorderThickness="1" BorderBrush="Gray">
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="3*"/>
                 <RowDefinition Height="50*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <common:LegendControl Grid.Row="0" Grid.Column="1" DataContext="{Binding LegendVm}" />
+
             <Border x:Name="wbGrid"
-                Grid.Row="1"
+                Grid.Row="2"
+                Grid.Column="1"
                 BorderThickness="1"
-                BorderBrush="White">
+                BorderBrush="Blue">
 
                 <common:WbImage x:Name="wbImage"
-                    ControlHeight = "{Binding WbImageVm.ControlHeight, Mode=TwoWay}"
-                    ControlWidth = "{Binding WbImageVm.ControlWidth, Mode=TwoWay}"
                     PointerPosition ="{Binding WbImageVm.PointerPosition, Mode=TwoWay}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
@@ -35,13 +43,16 @@
 
             </Border>
 
-            <Viewbox HorizontalAlignment="Center" Grid.Row="0" Stretch="Uniform">
+            <Viewbox HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Stretch="Uniform">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Title}" />
                 </StackPanel>
             </Viewbox>
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding LabelX}" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="{Binding LabelY}" VerticalAlignment="Center"/>
+
+            <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton Margin="5,2" Content="[X1,Y1]" IsChecked="{Binding X1Y1, Mode=TwoWay}"/>
                 <RadioButton Margin="5,2" Content="[X1,X2]" IsChecked="{Binding X1X2, Mode=TwoWay}"/>
                 <RadioButton Margin="5,2" Content="[X1,Y2]" IsChecked="{Binding X1Y2, Mode=TwoWay}"/>

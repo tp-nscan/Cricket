@@ -57,8 +57,7 @@ namespace Cricket.ViewModel.Common
                         .Subscribe(sz => UpdateData(StateMatrix, ProjMatrix));
             }
         }
-
-        private IDisposable _szChangedSubscr;
+        
         private GraphVm _graphVm;
         public GraphVm GraphVm
         {
@@ -66,10 +65,6 @@ namespace Cricket.ViewModel.Common
             set
             {
                 SetProperty(ref _graphVm, value);
-                _szChangedSubscr?.Dispose();
-                _szChangedSubscr =
-                    _graphVm.WbImageVm.OnSizeChanged
-                        .Subscribe(sz => UpdateData(StateMatrix, ProjMatrix));
             }
         }
 
@@ -89,8 +84,8 @@ namespace Cricket.ViewModel.Common
                     );
 
             GraphVm.SetData(
-                imageWidth: GraphVm.WbImageVm.ControlWidth,
-                imageHeight: GraphVm.WbImageVm.ControlHeight,
+                imageWidth: -1.0,
+                imageHeight: -1.0,
                 plotPoints: new List<P2V<float, Color>>(), 
                 plotLines: new List<LS2V<float, Color>>(), 
                 filledRects: MakePlotRectangles(points: ject),

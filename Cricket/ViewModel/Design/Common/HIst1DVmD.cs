@@ -8,7 +8,7 @@ namespace Cricket.ViewModel.Design.Common
 {
     public class Hist1DvmD : Hist1DVm
     {
-        public Hist1DvmD() : base(-0.4f, 4.1f, 5)
+        public Hist1DvmD() : base(-0.4f, 4.1f, 15)
         {
             UpdateData(TestData());
             GraphVm.Title = "Design Title";

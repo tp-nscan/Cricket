@@ -15,8 +15,8 @@ module ColorSets =
     let WcColors = 
         [|
            Colors.DarkSlateGray;  Colors.SteelBlue; Colors.DodgerBlue;  Colors.MediumBlue;
-           Colors.DarkBlue; Colors.Chartreuse; Colors.Green;  Colors.DarkGreen;
-           Colors.LightYellow;  Colors.Yellow; Colors.Orange;  Colors.OrangeRed;
+           Colors.DarkBlue; Colors.MediumSeaGreen; Colors.Green;  Colors.DarkGreen;
+           Colors.YellowGreen;  Colors.Yellow; Colors.Orange;  Colors.OrangeRed;
            Colors.Red;  Colors.DarkRed;
         |]
 
@@ -83,32 +83,34 @@ module ColorSets =
         sprintf "[%i, %i, %i]" col.R col.G col.B
         
 
-    let RedBlueSigned =
+    let RedBlueSFLeg =
         { minC=Colors.Black; maxC=Colors.Green; 
-          spanC=RedBlueSpan; mapper=GenSteps.SF32to256; 
-          minV= -1.0f; maxV=0.999f; tics=GenSteps.SF32Tics256 }
+          spanC=RedBlueSpan; mapper=Partition.SF32to256; 
+          minV= -1.0f; maxV=0.999f; tics=Partition.SF32Tics256 }
 
 
-    // Exp distributes 14 colors over the range [1, 196]
-//    let WcColorsLegend = 
-//        { minC=Colors.Transparent; maxC=Colors.HotPink; 
-//          spanC=WcColors; mapper=GenSteps.InvExpStepOne; 
-//          minV=1.0f; maxV=196.0f; tics=GenSteps.ExpStepTicsOne }
-//
-//
-//    let WcBrushesLegend = 
-//        { BrushMap.minB=new SolidColorBrush(Colors.Transparent); 
-//          maxB=new SolidColorBrush(Colors.HotPink); 
-//          spanB=WcColors |> Array.map(fun c->new SolidColorBrush(c)); 
-//          mapper=GenSteps.InvExpStepOne; 
-//          minV=1.0f; maxV=196.0f; tics=GenSteps.ExpStepTicsOne }
+    // 0.25 < beta < 0.75
+    let WcHistLeg beta max = 
+        let tics = Partition.QuadInterp beta 14 
+                    |> Seq.map(fun x -> x * max) 
+                    |> Partition.Quantize  
+                    |> Seq.toArray
+        { minC=Colors.LightYellow; maxC=Colors.HotPink; 
+          spanC=WcColors; mapper=(Partition.BinOfA tics); 
+          minV=1; maxV=(int max); tics=tics }
 
 
-    let GetColor<'a when 'a:comparison> (lm:ColorLeg<'a>) (value:'a) =
+    let WcHistLegInts (vals:int[]) =
+        let prams = Partition.HalfValueInt vals
+        WcHistLeg (fst prams) (float (snd prams))
+
+
+    let GetLegColor<'a when 'a:comparison> (lm:ColorLeg<'a>) (value:'a) =
         if (value < lm.minV) then lm.minC
-        else if (value > lm.maxV) then lm.maxC
+        else if (value >= lm.maxV) then lm.maxC
         else
         lm.spanC.[lm.mapper value]
 
 
-    
+    let GetLegMidVal<'a when 'a:comparison> (lm:ColorLeg<'a>) =
+        lm.tics.[(int (lm.tics.GetLength(0) / 2))]

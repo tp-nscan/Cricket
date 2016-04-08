@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cricket.ViewModel.Common;
 using TT;
@@ -7,23 +8,29 @@ namespace Cricket.ViewModel.Design.Common
 {
     public class Hist2DvmD : Hist2DVm
     {
-        public Hist2DvmD() : base(5)
+        public Hist2DvmD() : base(BinCts, ColorLegT, "Design title")
         {
             UpdateData(TestData());
         }
 
         public static IEnumerable<P2<float>> TestData()
-        {
-            var g = new MathNet.Numerics.Distributions.Normal(0.0, 1.0);
-            var randy = new MathNet.Numerics.Random.MersenneTwister();
+        { 
+            var retVal = GenBT.TestP2N(0.0f, 1.0f, 263, 1000000).ToArray();
 
-            g.RandomSource = randy;
-            var dblsX = new double[100000];
-            var dblsY = new double[100000];
-            g.Samples(dblsX);
-            g.Samples(dblsY);
-            return dblsX.Select((d,i) => 
-                new P2<float>((float)d, (float)dblsY[i]));
+            //for (var i = 0; i < 1000; i++)
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"{retVal[i].X}\t{retVal[i].Y}");
+            //}
+
+            return retVal;
         }
+
+        static Sz2<int> BinCts => new Sz2<int>(100,100);
+
+        static R<float> TestBounds => new R<float>(minX:-1.0f, maxX:2.2f, minY:1.2f, maxY:3.4f);
+
+        static Func<int[], ColorLeg<int>> ColorLegT => 
+             ColorSets.WcHistLegInts;
+
     }
 }

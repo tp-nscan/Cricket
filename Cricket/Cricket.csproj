@@ -87,6 +87,17 @@
     </Compile>
     <Compile Include="Common\BText.cs" />
     <Compile Include="Common\EnumerExt.cs" />
+    <Compile Include="ViewModel\Common\LegendVm.cs" />
+    <Compile Include="ViewModel\Common\Sz2IntVm.cs" />
+    <Compile Include="ViewModel\Design\Common\LegendVmD.cs" />
+    <Compile Include="ViewModel\Pages\Sandbox\ControlPageVm.cs" />
+    <Compile Include="ViewModel\Pages\Sandbox\LegendPageVm.cs" />
+    <Compile Include="View\Common\Hist2DControl.xaml.cs">
+      <DependentUpon>Hist2DControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Common\Hist1DControl.xaml.cs">
+      <DependentUpon>Hist1DControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\Common\GraphVm.cs" />
     <Compile Include="ViewModel\Common\Grid2DVm.cs" />
     <Compile Include="ViewModel\Common\Grid4DVm.cs" />
@@ -104,6 +115,18 @@
     <Compile Include="ViewModel\Design\Common\HIst1DVmD.cs" />
     <Compile Include="ViewModel\Design\Common\Hist2DVmD.cs" />
     <Compile Include="ViewModel\Design\Common\ProjectionControlVmD.cs" />
+    <Page Include="View\Common\CommonThemes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Common\Hist2DControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Common\Hist1DControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -117,6 +140,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Common\LegendControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Pages\Data\ArrayDataPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Pages\Sandbox\ControlPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Pages\Sandbox\GraphPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -161,6 +196,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Pages\Sandbox\LegendPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Pages\Settings\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,6 +208,16 @@
     <Compile Include="ViewModel\Pages\Sandbox\Grid4dPageVm.cs" />
     <Compile Include="ViewModel\Pages\Sandbox\Hist1dPageVm.cs" />
     <Compile Include="ViewModel\Pages\Sandbox\Hist2dPageVm.cs" />
+    <Compile Include="View\Common\LegendControl.xaml.cs">
+      <DependentUpon>LegendControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Common\Sz2IntCtrl.cs" />
+    <Compile Include="View\Pages\Data\ArrayDataPage.xaml.cs">
+      <DependentUpon>ArrayDataPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\Sandbox\ControlPage.xaml.cs">
+      <DependentUpon>ControlPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Pages\Sandbox\GraphPage.xaml.cs">
       <DependentUpon>GraphPage.xaml</DependentUpon>
     </Compile>
@@ -203,6 +252,9 @@
     <Compile Include="View\Pages\Sandbox\Hist2dPage.xaml.cs">
       <DependentUpon>Hist2dPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Pages\Sandbox\LegendPage.xaml.cs">
+      <DependentUpon>LegendPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Pages\Settings\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
@@ -214,7 +266,7 @@
       <DependentUpon>Appearance.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Pages\Settings\AppearanceViewModel.cs" />
-    <Page Include="View\Pages\Home.xaml">
+    <Page Include="View\Pages\Welcome\Home.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -222,7 +274,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="View\Pages\Home.xaml.cs">
+    <Compile Include="View\Pages\Welcome\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Pages\SettingsPage.xaml.cs">
@@ -234,6 +286,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RepoLocalDB\RepoLocalDB.csproj">
+      <Project>{80cdbbd2-ea76-4dce-bde9-bed984a05a9c}</Project>
+      <Name>RepoLocalDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TT\TT.fsproj">
       <Project>{e32e990b-c010-4014-8e45-22c2a577caa1}</Project>
       <Name>TT</Name>

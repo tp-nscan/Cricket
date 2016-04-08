@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Windows.Media;
 using Cricket.ViewModel.Common;
 using TT;
@@ -10,19 +11,21 @@ namespace Cricket.ViewModel.Design.Common
     {
         public GraphVmD()
         {
+            var pr = PlotRectangles.ToList();
+
             SetData(
-                imageWidth: 100, 
-                imageHeight:100, 
+                imageWidth: -1, 
+                imageHeight:-1, 
                 plotPoints: PlotPoints, 
-                plotLines: new List<LS2V<float, Color>>(), 
+                plotLines: Enumerable.Empty<LS2V<float, Color>>(), 
                 filledRects: PlotRectangles,
-                openRects: new List<RV<float, Color>>());
-            Title = "Design Title";
-            TitleX = "Design Title X";
-            TitleY = "Design Title Y";
+                openRects: Enumerable.Empty<RV<float, Color>>());
+                Title = "Design Title";
+                TitleX = "Design Title X";
+                TitleY = "Design Title Y";
         }
 
-        static List<P2V<float, Color>> PlotPoints
+        static IEnumerable<P2V<float, Color>> PlotPoints
         {
             get
             {
@@ -33,24 +36,30 @@ namespace Cricket.ViewModel.Design.Common
                                             y: i,
                                             v: c
                             )
-                         ).ToList();
+                         );
             }
         }
 
-        static List<RV<float, Color>> PlotRectangles
+        static IEnumerable<RV<float, Color>> PlotRectangles
         {
             get
             {
-                return ColorSets.RedBlueSpan
+                return
+
+
+                        //Enumerable.Empty<RV<float, Color>>();
+
+
+                   ColorSets.RedBlueSpan
                     .ToList()
                     .Select((c, i) => new RV<float, Color>(
-                                        minX: 200-i*9,
-                                        minY: i*9,
-                                        maxX: RectSize,
-                                        maxY: RectSize,
+                                        minX: 200 - i * 2,
+                                        minY: i * 2,
+                                        maxX: 200 - i * 2 + RectSize,
+                                        maxY: i * 2 + RectSize,
                                         v: c
                         )
-                     ).ToList();
+                     );
             }
         }
 

@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Cricket.Pages
+namespace Cricket.View.Common
 {
     /// <summary>
-    /// Interaction logic for Home.xaml
+    /// Interaction logic for LegendControl.xaml
     /// </summary>
-    public partial class Home : UserControl
+    public partial class LegendControl : UserControl
     {
-        public Home()
+        public LegendControl()
         {
             InitializeComponent();
         }

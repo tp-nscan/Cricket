@@ -24,8 +24,6 @@
                 BorderBrush="White">
 
                 <common:WbImage x:Name="wbImage"
-                    ControlHeight = "{Binding WbImageVm.ControlHeight, Mode=TwoWay}"
-                    ControlWidth = "{Binding WbImageVm.ControlWidth, Mode=TwoWay}"
                     PointerPosition ="{Binding WbImageVm.PointerPosition, Mode=TwoWay}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"

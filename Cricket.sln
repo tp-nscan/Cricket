@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cricket", "Cricket\Cricket.csproj", "{E9E8E035-C2E5-4BAB-B9B5-E17980D2021B}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TT", "TT\TT.fsproj", "{E32E990B-C010-4014-8E45-22C2A577CAA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepoLocalDB", "RepoLocalDB\RepoLocalDB.csproj", "{80CDBBD2-EA76-4DCE-BDE9-BED984A05A9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepoLocalDB.Test", "RepoLocalDB.Test\RepoLocalDB.Test.csproj", "{F1CED775-58A7-4721-8D3E-0886A947D821}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{E32E990B-C010-4014-8E45-22C2A577CAA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E32E990B-C010-4014-8E45-22C2A577CAA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E32E990B-C010-4014-8E45-22C2A577CAA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80CDBBD2-EA76-4DCE-BDE9-BED984A05A9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80CDBBD2-EA76-4DCE-BDE9-BED984A05A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80CDBBD2-EA76-4DCE-BDE9-BED984A05A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80CDBBD2-EA76-4DCE-BDE9-BED984A05A9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1CED775-58A7-4721-8D3E-0886A947D821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1CED775-58A7-4721-8D3E-0886A947D821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1CED775-58A7-4721-8D3E-0886A947D821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1CED775-58A7-4721-8D3E-0886A947D821}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

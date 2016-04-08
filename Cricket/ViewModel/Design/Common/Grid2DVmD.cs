@@ -5,7 +5,7 @@ namespace Cricket.ViewModel.Design.Common
 {
     public class Grid2DVmD : Grid2DVm<float>
     {
-        public Grid2DVmD() : base(TestStrides, ColorSets.RedBlueSigned, "Test title")
+        public Grid2DVmD() : base(TestStrides, ColorSets.RedBlueSFLeg, "Test title")
         {
             UpdateData(DesignData.Grid2DTestData(TestStrides));
         }

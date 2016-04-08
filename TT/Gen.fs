@@ -123,7 +123,7 @@ module GenS =
 
 
 
-module BTmap =
+module GenBT =
 
     let P2ofSeq (values:seq<float32>) =
         values |> Seq.chunkBySize 2     
@@ -170,6 +170,11 @@ module BTmap =
 
     let TestP2 (seed:int) (count:int) =
         P2ofSeq (GenS.SeqOfRandSF32 (GenV.Twist seed)) 
+                |> Seq.take count
+
+
+    let TestP2N (mean:float32) (stddev:float32) (seed:int) (count:int) =
+        P2ofSeq (GenS.NormalF32 (GenV.Twist seed) mean stddev) 
                 |> Seq.take count
 
 

@@ -7,11 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Style="{StaticResource ContentRoot}" DataContext="{Binding Hist2DVm}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="BASIC PAGE" Style="{StaticResource Heading2}" />
-        <common:GraphControl Grid.Row="1" x:Name="graphControl" DataContext="{Binding GraphVm}" />
+        <common:Hist2DControl />
     </Grid>
+
 </UserControl>

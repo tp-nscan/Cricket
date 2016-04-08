@@ -13,14 +13,38 @@ module Grid2dCnxn =
         | Block of int
         | Disk of int
 
+
+    let StarNbrs = 
+        seq {
+              yield  { P2.X =  0; Y = -1; };
+              yield  { P2.X =  1; Y =  0; }; 
+              yield  { P2.X =  0; Y =  1; };
+              yield  { P2.X = -1; Y =  0; }
+            }
+
  
     let StarNbrsF<'T> fV = 
         [| 
             { P2V.X =  0; Y = -1; V = fV  0 -1};
-            { P2V.X = -1; Y =  0; V = fV -1  0}; 
+            { P2V.X =  1; Y =  0; V = fV -1  0}; 
             { P2V.X =  0; Y =  1; V = fV  0  1};
             { P2V.X = -1; Y =  0; V = fV -1  0}
         |]
+
+
+    let RingNbrs = 
+        seq {  
+            yield { P2.X = -1; Y = -1; };
+            yield { P2.X =  0; Y = -1; };
+            yield { P2.X =  1; Y = -1; };
+
+            yield { P2.X = -1; Y =  0; };
+            yield { P2.X =  1; Y =  0; };
+
+            yield { P2.X = -1; Y =  1; };
+            yield { P2.X =  0; Y =  1; };
+            yield { P2.X =  1; Y =  1; };
+        }
 
 
     let RingNbrsF<'T> fV = 
@@ -38,7 +62,15 @@ module Grid2dCnxn =
         |]
 
 
-    let BlockNeighbors (radius:int) fV =
+    let BlockNeighbors (radius:int) =
+        seq {  
+            for row in -radius .. radius do
+                    for col in -radius .. radius do
+                        yield { P2.X = col; Y=row; }
+        }
+
+
+    let BlockNeighborsF (radius:int) fV =
         [|
             for row in -radius .. radius do
                     for col in -radius .. radius do
@@ -46,48 +78,97 @@ module Grid2dCnxn =
         |]
 
 
-    let DiskNbrs (radius:int) fV =
+    let DiskNbrs (radius:int) =
         let rFloat = (float radius)
-        [|
+        seq {
             for row in -radius .. radius do
-                    let rowsq = float ( row*row )
-                    for col in -radius .. radius do
-                        let colsq =  float ( col*col )
-                        let dsq = Math.Sqrt(colsq + rowsq)
-                        if (dsq < rFloat + 0.415) then
-                            yield { P2V.X = col; Y=row; V= fV col row }
-        |]
+                let rowsq = float ( row*row )
+                for col in -radius .. radius do
+                    let colsq =  float ( col*col )
+                    let dsq = Math.Sqrt(colsq + rowsq)
+                    if (dsq < rFloat + 0.415) then
+                        yield { P2.X = col; Y=row; }
+            }
 
 
-    let GetZ4VsForNodeF (offsets: (int->int->float32) -> P2V<int,float32>[]) 
-                        (valuator:int->int->float32) 
-                        (stride:int) (x:int) (y:int) =
-        (offsets valuator) |> Array.map( 
-            fun p -> { 
-                      LS2V.X1 = x; 
-                            Y1 = y; 
-                            X2 = (p.X + x + stride) % stride; 
-                            Y2 = (p.Y + y + stride) % stride;
-                            V = p.V
-                     } 
-            )
+    let DiskNbrsF (radius:int) fV =
+        let rFloat = (float radius)
+        seq {
+            for row in -radius .. radius do
+                let rowsq = float ( row*row )
+                for col in -radius .. radius do
+                    let colsq =  float ( col*col )
+                    let dsq = Math.Sqrt(colsq + rowsq)
+                    if (dsq < rFloat + 0.415) then
+                        yield { P2V.X = col; Y=row; V= fV col row }
+            }
+         
+
+    // returns a seq<P2V<int,P2<int>>> of connection info
+    let AllOffsets (strides:Sz2<int>) (offsets:seq<P2<int>>) =
+        A2dUt.Raster2d strides 
+        |> Seq.map(fun pt-> offsets 
+                            |> Seq.map(fun off-> {P2V.X=pt.X; Y=pt.Y; V=off}))
+        |> Seq.concat
 
 
-//    let GetAllD4s (offsets: V2<float32>[]) (stride:int) =
-//        (Array2dEx.D2sOfArray2D stride stride |> Seq.cast<Z2<int>>)
-//              |> Seq.map(fun c-> (GetZ4VsForNode offsets stride c.X c.Y) |> Array.toSeq)
-//              |> Seq.concat
- 
+   
+    let GeneralLS2Vs (strides:Sz2<int>) (offsets:seq<P2<int>>) 
+                 (localWeights:int->int->int->int->float32) =
+        AllOffsets strides offsets
+        |> Seq.map(fun inf-> 
+                    { 
+                      LS2V.X1 = inf.X; 
+                           Y1 = inf.Y; 
+                           X2 = (inf.X + inf.V.X + strides.X) % strides.X; 
+                           Y2 = (inf.Y + inf.V.Y + strides.Y) % strides.Y;
+                            V = localWeights inf.X inf.Y inf.V.X inf.V.Y
+                     }
+                  )
 
-//    let MkArray =
-//        [| 1;2;3 |] |> Array.toSeq
-//
-//    let MakeZ4Vs (stride:int) =
-//       seq {
-//             for row in 0 .. stride - 1 do
-//                for col in 0 .. stride - 1 do
-//                    yield! MkArray
-//        }
+   
+    let InvariantLS2Vs (strides:Sz2<int>) (offsets:seq<P2<int>>) 
+                 (localWeights:int->int->float32) =
+        AllOffsets strides offsets
+        |> Seq.map(fun inf-> 
+                    { 
+                      LS2V.X1 = inf.X; 
+                           Y1 = inf.Y; 
+                           X2 = (inf.X + inf.V.X + strides.X) % strides.X; 
+                           Y2 = (inf.Y + inf.V.Y + strides.Y) % strides.Y;
+                            V = localWeights inf.V.X inf.V.Y
+                     }
+                  )
+
+
+    let UniformStar (strides:Sz2<int>) = 
+        InvariantLS2Vs strides StarNbrs (fun x y -> 1.0f)
+
+
+    let GradientStar (strides:Sz2<int>) = 
+        let gf x1 y1 x2 y2 =
+            let x1f = (float32 x1)
+            let y1f = (float32 x2)
+            let x2f = (float32 y1)
+            let y2f = (float32 y2)
+            let sX = (float32 strides.X)
+            let sY = (float32 strides.Y)
+            (x1f - y1f) / sX
+        GeneralLS2Vs strides StarNbrs gf
+
+
+//    let LS2VForNode (offsets: (int->int->float32) -> P2V<int,float32>[]) 
+//                    (valuator:int->int->float32) 
+//                    (stride:int) (x:int) (y:int) =
+//        (offsets valuator) |> Array.map( 
+//            fun p -> { 
+//                      LS2V.X1 = x; 
+//                           Y1 = y; 
+//                           X2 = (p.X + x + stride) % stride; 
+//                           Y2 = (p.Y + y + stride) % stride;
+//                           V = p.V
+//                     }
+//            )
 
 
     let MatrixEntryToVectorEntry colCount (mE:int*int*float32) =
@@ -131,49 +212,7 @@ module Grid2dCnxn =
              })
 
 
-//    let Make3TuplesRand offsets (stride:int) (seed:int) (mean:float32) (sd:float32) =
-//        let rng = Random.MersenneTwister(seed)
-//        let seqVals = Generators.NormalF32 rng mean sd
-//        let enumer = seqVals.GetEnumerator()
-//        let fund4 x =
-//            enumer.MoveNext() |> ignore
-//            enumer.Current
-//        CnxZ4To3Tuple stride (GetAllD4s offsets stride)
-
-
-//    let Z4sForForGridWithRingNbrs (stride:int) =
-//        (GetAllD4s RingNbrs stride) |> Seq.map(fun v -> 
-//            {V2_2.X1 = v.X1;
-//             V2_2.Y1 = v.Y1; 
-//             V2_2.X2 = v.X2; 
-//             V2_2.Y2 = v.Y2;
-//             V2_2.Val = 1.0f})
-
-
-//    let Z4sForForGridWithRingNbrs (stride:int) =
-//        let rng = Random.MersenneTwister(123)
-//        let seqVals = Generators.NormalF32 rng 0.0f 0.31f
-//
-//        ((GetAllD4s RingNbrs stride), seqVals) ||> Seq.map2(fun v r -> 
-//            {V2_2.X1 = v.X1;
-//             V2_2.Y1 = v.Y1; 
-//             V2_2.X2 = v.X2; 
-//             V2_2.Y2 = v.Y2;
-//             V2_2.Val = r})
-
-
-//    let Z4sForForGridWithRingNbrs (stride:int) =
-//        let vals = Make3TuplesRand (RingNbrsF (ConstF 1.0f)) stride 123 10.9f 0.5f
-//                        |> Seq.toList
-//        let builder = Matrix<float32>.Build
-//        let matrix = builder.SparseOfIndexed (stride*stride, stride*stride, vals)
-//        matrix |> ToZ4Vals
-//
-//
-//    let Z4sForForGridWithRingNbrsB (stride:int) =
-//        let flats = MatrixEntryToVectorEntry (stride * stride)
-//        let vals = Make3TuplesRand (RingNbrsF (fun i j -> 1.0f)) stride 123 10.9f 0.5f
-//                        |> Seq.map(fun x -> flats x)
-//        let builder = Vector<float32>.Build
-//        let vec = builder.SparseOfIndexed (stride*stride*stride*stride, vals)
-//        vec
+    let LS2VForGridWithRingNbrs (stride:int) =
+        let rng = GenV.Twist(123)
+        let seqVals = GenS.NormalF32 rng 0.0f 0.31f
+        None
