@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -12,16 +13,23 @@ namespace Cricket.ViewModel.Common
     {
         public Grid4DVm(P2<int> strides, P2<int> cursor, ColorLeg<T> colorLeg, string title = "")
         {
-            _x1Y1 = true;
+            X1Y1 = true;
             Strides = strides;
             Cursor = cursor;
             Values = new List<LS2V<int,T>>();
             ColorLeg = colorLeg;
             WbImageVm = new WbImageVm();
             Title = title;
+            LegendVm = new LegendVm(
+                minVal: "<" + colorLeg.minV,
+                midVal: ColorSets.GetLegMidVal(colorLeg).ToString(),
+                maxVal: ">" + colorLeg.maxV,
+                minCol: colorLeg.minC,
+                midColors: colorLeg.spanC,
+                maxColor: colorLeg.maxC
+                );
         }
-
-        private IDisposable _szChangedSubscr;
+        
         private IDisposable _pointerChangedSubscr;
         private WbImageVm _wbImageVm;
         public WbImageVm WbImageVm
@@ -30,13 +38,38 @@ namespace Cricket.ViewModel.Common
             set
             {
                 SetProperty(ref _wbImageVm, value);
-                _szChangedSubscr?.Dispose();
-                _szChangedSubscr =
-                    _wbImageVm.OnSizeChanged
-                        .Subscribe(sz => UpdateData(Values));
-
                 _pointerChangedSubscr?.Dispose();
                 _pointerChangedSubscr = WbImageVm.OnPointerChanged.Subscribe(PointerChanged);
+            }
+        }
+
+        private string _labelX;
+        public string LabelX
+        {
+            get { return _labelX; }
+            set
+            {
+                SetProperty(ref _labelX, value);
+            }
+        }
+
+        private string _labelY;
+        public string LabelY
+        {
+            get { return _labelY; }
+            set
+            {
+                SetProperty(ref _labelY, value);
+            }
+        }
+
+        private LegendVm _legendVm;
+        public LegendVm LegendVm
+        {
+            get { return _legendVm; }
+            set
+            {
+                SetProperty(ref _legendVm, value);
             }
         }
 
@@ -57,17 +90,13 @@ namespace Cricket.ViewModel.Common
         public void UpdateData(IEnumerable<LS2V<int, T>> values)
         {
             if (values != null) Values = values.ToList();
-
-            if (WbImageVm.ImageArea < 0.1)
-            {
-                return;
-            }
-
+            if( WbImageVm == null) return;
+            
             var cursorFilter = FilterByCursor();
             var rectangler = MakeFilledRectangle();
             WbImageVm.ImageData = new ImageData(
-                    boundingRect: new R<float>(Strides.Y, 0, 0, Strides.X),
-                    imageSize: new Sz2<double>(WbImageVm.ControlWidth, WbImageVm.ControlHeight),
+                    boundingRect: new R<float>(0, Strides.X, 0, Strides.Y), 
+                    imageSize: new Sz2<double>(-1.0, -1.0),
                     openRects: MakeOpenRectangle().ToArray(),
                     filledRects: Values
                                     .Where(cursorFilter)
@@ -115,7 +144,7 @@ namespace Cricket.ViewModel.Common
                         minY: v.Y2,
                         maxX: v.X2 + 1.0f,
                         maxY: v.Y2 + 1.0f,
-                        v: ColorSets.GetColor(ColorLeg, v.V)
+                        v: ColorSets.GetLegColor(ColorLeg, v.V)
                     );
             }
             if (X1X2)
@@ -125,7 +154,7 @@ namespace Cricket.ViewModel.Common
                         minY: v.Y2,
                         maxX: v.Y1 + 1.0f,
                         maxY: v.Y2 + 1.0f,
-                        v: ColorSets.GetColor(ColorLeg, v.V)
+                        v: ColorSets.GetLegColor(ColorLeg, v.V)
                     );
             }
             if (X1Y2)
@@ -135,7 +164,7 @@ namespace Cricket.ViewModel.Common
                         minY: v.X2,
                         maxX: v.Y1 + 1.0f,
                         maxY: v.X2 + 1.0f,
-                        v: ColorSets.GetColor(ColorLeg, v.V)
+                        v: ColorSets.GetLegColor(ColorLeg, v.V)
                     );
             }
             if (Y1X2)
@@ -145,7 +174,7 @@ namespace Cricket.ViewModel.Common
                         minY: v.Y2,
                         maxX: v.X1 + 1.0f,
                         maxY: v.Y2 + 1.0f,
-                        v: ColorSets.GetColor(ColorLeg, v.V)
+                        v: ColorSets.GetLegColor(ColorLeg, v.V)
                     );
             }
             if (Y1Y2)
@@ -155,7 +184,7 @@ namespace Cricket.ViewModel.Common
                         minY: v.X2,
                         maxX: v.X1 + 1.0f,
                         maxY: v.X2 + 1.0f,
-                        v: ColorSets.GetColor(ColorLeg, v.V)
+                        v: ColorSets.GetLegColor(ColorLeg, v.V)
                     );
             }
             if (X2Y2)
@@ -165,7 +194,7 @@ namespace Cricket.ViewModel.Common
                         minY: v.Y1,
                         maxX: v.X1 + 1.0f,
                         maxY: v.Y1 + 1.0f,
-                        v: ColorSets.GetColor(ColorLeg, v.V)
+                        v: ColorSets.GetLegColor(ColorLeg, v.V)
                     );
             }
             throw new Exception("case not handled in FilterByCursor");
@@ -211,6 +240,8 @@ namespace Cricket.ViewModel.Common
                 {
                     _x1Y1 = _x1X2 = _x1Y2 = _y1X2 = _y1Y2 = _x2Y2 = false;
                     SetProperty(ref _x1Y1, true);
+                    LabelX = "X2";
+                    LabelY = "Y2";
                     UpdateData(Values);
                 }
             }
@@ -226,6 +257,8 @@ namespace Cricket.ViewModel.Common
                 {
                     _x1Y1 = _x1X2 = _x1Y2 = _y1X2 = _y1Y2 = _x2Y2 = false;
                     SetProperty(ref _x1X2, true);
+                    LabelX = "Y1";
+                    LabelY = "Y2";
                     UpdateData(Values);
                 }
             }
@@ -241,6 +274,8 @@ namespace Cricket.ViewModel.Common
                 {
                     _x1Y1 = _x1X2 = _x1Y2 = _y1X2 = _y1Y2 = _x2Y2 = false;
                     SetProperty(ref _x1Y2, true);
+                    LabelX = "X2";
+                    LabelY = "Y1";
                     UpdateData(Values);
                 }
             }
@@ -256,6 +291,8 @@ namespace Cricket.ViewModel.Common
                 {
                     _x1Y1 = _x1X2 = _x1Y2 = _y1X2 = _y1Y2 = _x2Y2 = false;
                     SetProperty(ref _y1X2, true);
+                    LabelX = "X1";
+                    LabelY = "Y2";
                     UpdateData(Values);
                 }
             }
@@ -271,6 +308,8 @@ namespace Cricket.ViewModel.Common
                 {
                     _x1Y1 = _x1X2 = _x1Y2 = _y1X2 = _y1Y2 = _x2Y2 = false;
                     SetProperty(ref _y1Y2, true);
+                    LabelX = "X1";
+                    LabelY = "X2";
                     UpdateData(Values);
                 }
             }
@@ -286,6 +325,8 @@ namespace Cricket.ViewModel.Common
                 {
                     _x1Y1 = _x1X2 = _x1Y2 = _y1X2 = _y1Y2 = _x2Y2 = false;
                     SetProperty(ref _x2Y2, true);
+                    LabelX = "X1";
+                    LabelY = "Y1";
                     UpdateData(Values);
                 }
             }

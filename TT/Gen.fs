@@ -34,6 +34,11 @@ module GenV =
 
 module GenS = 
 
+    // a sequence of random int from (0, n)
+    let SeqOfRandZN (n:int) (rng:Random) =
+        Seq.initInfinite ( fun i -> rng.Next(n))
+
+
     let NormalF (rnd:Random) (mean:float32) (stddev:float32) =
         Normal.Samples(rnd=rnd, mean=(float mean), stddev=(float stddev))
 
@@ -125,38 +130,32 @@ module GenS =
 
 module GenBT =
 
-    let P2ofSeq (values:seq<float32>) =
+    let P2ofSeq<'a> (values:seq<'a>) =
         values |> Seq.chunkBySize 2     
                |> Seq.map(fun v -> {P2.X=v.[0]; Y=v.[1];})
 
 
-    let P3ofSeq (values:seq<float32>) =
+    let P3ofSeq (values:seq<'a>) =
         values |> Seq.chunkBySize 3  
                |> Seq.map(fun v -> {P3.X=v.[0]; Y=v.[1]; Z=v.[2];})
 
 
-    let IofSeqChunk (values:seq<float32>) =
+    let inline IofSeqChunk< ^a when ^a: comparison> (values:seq<'a>) =
         values |> Seq.chunkBySize 2    
                |> Seq.map(fun v -> ( BT.RegularI v.[0] v.[1] ))
 
 
     //Sequences that use this are typicaly ordered, so that assumption is
-    //neccessary to make intevals with Max>Min
-    let IofSeqSlide (values:seq<float32>) =
+    //neccessary to make intevals 'a Max>Min
+    let IofSeqSlide<'a> (values:seq<'a>) =
         values |> Seq.windowed 2    
                |> Seq.map(fun v -> {I.Min=v.[0]; Max=v.[1];})
 
 
-    let RofSeq (values:seq<float32>) =
+    let inline RofSeq< ^a when ^a: comparison> (values:seq< ^a>) =
         values |> Seq.chunkBySize 4   
                |> Seq.map(fun v -> (BT.RegularR v.[0] v.[1] v.[2] v.[3])
                          )
-
-
-    let ConsecIntervals (values:seq<float32>) =
-        let mutable lv = values |> Seq.head
-        values |> Seq.head
-
 
     let LS2ofSeq (values:seq<float32>) =
         values |> Seq.chunkBySize 4
@@ -184,7 +183,7 @@ module GenBT =
 
 
     let TestI (seed:int) (count:int) =
-        IofSeqChunk (GenS.SeqOfRandSF32 (GenV.Twist seed)) 
+        IofSeqChunk<float32> (GenS.SeqOfRandSF32 (GenV.Twist seed)) 
                     |> Seq.take count
 
 
@@ -196,3 +195,24 @@ module GenBT =
     let TestLS2 (seed:int) (count:int) =
         LS2ofSeq (GenS.SeqOfRandSF32 (GenV.Twist seed)) 
                 |> Seq.take count
+
+
+module GenA2 =
+
+    let RandF32 (bounds:Sz2<int>) (seed:int) = 
+        let valA = GenS.SeqOfRandUF32 (GenV.Twist seed)
+                   |> Seq.take(BT.Count bounds)
+                   |> Seq.toArray
+        Array2D.init (bounds.Y) 
+                     (bounds.X) 
+                     (fun x y -> valA.[y * bounds.X + x])
+
+
+    let RandInt (bounds:Sz2<int>) (maxN:int) (seed:int) = 
+        let valA = GenS.SeqOfRandZN maxN (GenV.Twist seed) 
+                   |> Seq.take(BT.Count bounds)
+                   |> Seq.toArray
+        Array2D.init (bounds.Y) 
+                     (bounds.X) 
+                     (fun x y -> valA.[y * bounds.X + x])
+

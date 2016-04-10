@@ -13,10 +13,15 @@ open GenBT
 module VecUt =
 
     // given the length, and a sequence of values, a dense vector is produced
-    let FromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
+    let DenseFromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
                  length (mVals:seq<'a>) =
         let chunk = mVals |> Seq.take length |> Seq.toArray
         DenseVector.init length (fun x  -> chunk.[x])
+
+        // given the length, and a sequence of values, a dense vector is produced
+    let SparseFromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
+                 length (mVals:seq<int*'a>) =
+        Vector<'a>.Build.SparseOfIndexed(length, mVals)
 
 
     // given the length, and a sequence of values, a dense vector is produced
@@ -37,11 +42,40 @@ module VecUt =
                         String.Empty
 
 
+module GenVec =
+
+    let DenseF32 length seed =
+        let valA = GenS.SeqOfRandUF32 (GenV.Twist seed)
+                   |> Seq.take(length)
+                   |> Seq.toArray
+        DenseVector.init length 
+                     (fun x -> valA.[x])
+
+
+    let RandSparse length count seed =
+        let valA = GenS.SeqOfRandUF32 (GenV.Twist seed)
+                |> Seq.take(count)
+        let dexA = GenS.SeqOfRandZN length (GenV.Twist seed)
+                |> Seq.take(count)
+                |> Seq.distinctBy id
+        VecUt.SparseFromSeq length (Seq.zip dexA valA)
+
+
+
+//    let DenseInt max length seed =
+//        let valA = GenS.SeqOfRandZN max (GenV.Twist seed)
+//                   |> Seq.take(length)
+//                   |> Seq.toArray
+//        DenseVector.init length
+//                     (fun x -> valA.[x])
+
+
+    
 module MatrixUt =
 
     // given the size of the square matrix, and a sequence of values, a 2d
     // matrix is produced
-    let FromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
+    let DenseFromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
                  rows cols (mVals:seq<'a>) =
         let chunk = mVals |> Seq.take (rows*cols) |> Seq.toArray
         DenseMatrix.init rows cols (fun x y -> chunk.[x*cols + y])
@@ -150,3 +184,28 @@ module MatrixUt =
         let xNorms = Column2Norm (basisX.Multiply states)
         let yNorms = Column2Norm (basisY.Multiply states)
         (yNorms |> InOrder) |> Seq.map2 (fun x y -> {P2.X=x; Y=y;} ) (xNorms |> InOrder)
+
+
+
+module GenMatrix =
+
+    let DenseF32 (bounds:Sz2<int>) (seed:int) =
+        let valA = GenS.SeqOfRandUF32 (GenV.Twist seed)
+                   |> Seq.take(BT.Count bounds)
+                   |> Seq.toArray
+        DenseMatrix.init (bounds.Y) 
+                     (bounds.X) 
+                     (fun x y -> valA.[y * bounds.X + x])
+
+
+    let SparseVals length count seed =
+        let valA = GenS.SeqOfRandUF32 (GenV.Twist seed)
+                |> Seq.take(count)
+
+        let pos = GenS.SeqOfRandZN length (GenV.Twist seed)
+                |> GenBT.P2ofSeq
+                |> Seq.take(count)
+                |> Seq.distinctBy id
+        pos |> Seq.map2(fun v d -> {P2V.X=d.X; Y=d.Y; V=v}) valA 
+
+

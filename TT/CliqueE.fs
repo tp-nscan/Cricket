@@ -151,7 +151,7 @@ module CliqueEbuilders =
 
     let CreateRandomMems (cliqueBuildRandMemParams:CliqueBuildRandMemParams) =
         let seq = (GenS.SeqOfRandBUF32 0.5f (GenV.Twist(cliqueBuildRandMemParams.RandSeed)))
-        MatrixUt.FromSeq cliqueBuildRandMemParams.MemSize
+        MatrixUt.DenseFromSeq cliqueBuildRandMemParams.MemSize
                 cliqueBuildRandMemParams.MemCount 
                 seq
 

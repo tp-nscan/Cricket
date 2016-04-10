@@ -271,6 +271,9 @@ module BT =
             sI |> Seq.fold (fun acc elem -> StretchII acc elem ) range
 
 
+    let Count (sz:Sz2<int>) =
+        sz.X * sz.Y
+
 
 module AUt =
 
@@ -330,12 +333,14 @@ module A2dUt =
              yield!  qq stride (0, 0)
        }
          
+
     // Creates a 1D array that represents a 2d upper triangular matrix
     let UpperTriangulate sqSize f =
         let cached = (UtCoords sqSize) 
                         |> Seq.map(fun (a,b) -> f a b)
                         |> Seq.toArray                            
         (fun x y -> cached.[SymRowMajorIndex x y] )
+
 
   // Creates a 1D array that represents a 2d upper triangular matrix with uniform diagonal
     let UpperTriangulateDiag (diagVal:'a) stride f =

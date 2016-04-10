@@ -2,16 +2,27 @@
 
 module Data =
 
+    // (Dense, Sparse) (int, float) (1d, 2d, 4d) (N, U, B, UB) 
+
     type SparseVal1d<'a> = {dex:int; value:'a}
     type SparseVal2d<'a> = {x:int; y:int; value:'a}
     type SparseVal4d<'a> = {x1:int; y1:int; x2:int; y2:int; value:'a}
 
+    type Er = {ID:int; Fn:string; Ln:string}
 
     type ValBnd =
     | N       //[minVal, maxVal]
     | U       //[0, maxVal]
     | B       //[-1, 1]
     | UB      //[0, 1]
+
+    type MatrixShape =
+    | D1
+    | D2
+    | D4
+    | S1
+    | S2
+    | S4
 
 
     type IntArray =

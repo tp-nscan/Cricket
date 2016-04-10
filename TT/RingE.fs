@@ -135,7 +135,7 @@ module RingEbuilders =
 
     let CreateRandomMems (ringBuildRandMemParams:RingBuildRandMemParams) =
         let seq = (GenS.SeqOfRandBUF32 0.5f (GenV.Twist(ringBuildRandMemParams.RandSeed)))
-        MatrixUt.FromSeq ringBuildRandMemParams.MemSize
+        MatrixUt.DenseFromSeq ringBuildRandMemParams.MemSize
                 ringBuildRandMemParams.MemCount 
                 seq
 

@@ -243,26 +243,12 @@ ColorSets.QuadColorRing 2 Colors.Black Colors.White Colors.Red Colors.Blue |> Se
 #load "Gen.fs"
 #load "Partition.fs"
 #load "DesignData.fs"
+#load "MathNetUtils.fs"
 #load "Grid2dCnxn.fs"
 open TT
 
-
-let UniformStar (strides:Sz2<int>) = 
-    let uniCon x y = 1.0f
-    Grid2dCnxn.AllLS2Vs strides Grid2dCnxn.StarNbrs (fun x y -> 1.0f)
-    |> Seq.toArray
-
-
-UniformStar {Sz2.X=5; Y=4}
-
 Grid2dCnxn.AllOffsets {Sz2.X=5; Y=4} Grid2dCnxn.StarNbrs |> Seq.toArray
-
-
 A2dUt.Raster2d {Sz2.X=5; Y=4} |> Seq.toArray
-
-
-
 (DesignData.Grid2DTestData {Sz2.X=10; Sz2.Y=15}) |> Seq.toArray
-
 (A2dUt.Raster2d {Sz2.X=4; Sz2.Y=4}) |> Seq.toArray
 

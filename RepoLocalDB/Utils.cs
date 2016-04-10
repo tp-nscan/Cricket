@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MathNet.Numerics.LinearAlgebra;
+using TT;
 
 namespace RepoLocalDB
 {
@@ -58,6 +60,7 @@ namespace RepoLocalDB
 
         #endregion
 
+
         #region float[] to Base64
 
         public static string Base64Encode(this float[] arr)
@@ -91,6 +94,7 @@ namespace RepoLocalDB
 
         #endregion
 
+
         public static bool IsSameAs<T>(this IEnumerable<T> ableA, IEnumerable<T> ableB)
         {
             var atorA = ableA.ToList();
@@ -100,6 +104,77 @@ namespace RepoLocalDB
                 return false;
             }
             return !atorA.Where((t, i) => !t.Equals(atorB[i])).Any();
+        }
+
+        public static bool IsSameAs(this int[,] ableA, int[,] ableB)
+        {
+            if(ableA.GetLength(0) != ableB.GetLength(0)) return false;
+            if(ableA.GetLength(1) != ableB.GetLength(1)) return false;
+
+            for(var r = 0; r< ableA.GetLength(0); r++)
+                for(var c=0; c< ableA.GetLength(1); c++)
+                    if (ableA[r, c] != ableB[r, c]) return false;
+
+            return true;
+        }
+
+        public static bool IsSameAs(this float[,] ableA, float[,] ableB)
+        {
+            if (ableA.GetLength(0) != ableB.GetLength(0)) return false;
+            if (ableA.GetLength(1) != ableB.GetLength(1)) return false;
+
+            for (var r = 0; r < ableA.GetLength(0); r++)
+                for (var c = 0; c < ableA.GetLength(1); c++)
+                    if (Math.Abs(ableA[r, c] - ableB[r, c]) > NumUt.Epsilon) return false;
+
+            return true;
+        }
+
+        public static bool IsSameAs(this Vector<int> ableA, Vector<int> ableB)
+        {
+            if (ableA.Count() != ableB.Count()) return false;
+
+            for (var r = 0; r < ableA.Count(); r++)
+                    if (ableA[r] != ableB[r]) return false;
+
+            return true;
+        }
+
+
+        public static bool IsSameAs(this Vector<float> ableA, Vector<float> ableB)
+        {
+            if (ableA.Count() != ableB.Count()) return false;
+
+            for (var r = 0; r < ableA.Count(); r++)
+                if (Math.Abs(ableA[r] - ableB[r]) > NumUt.Epsilon) return false;
+
+            return true;
+        }
+
+
+        public static bool IsSameAs(this Matrix<int> ableA, Matrix<int> ableB)
+        {
+            if (ableA.RowCount != ableB.RowCount) return false;
+            if (ableA.ColumnCount != ableB.ColumnCount) return false;
+
+            for (var r = 0; r < ableA.RowCount; r++)
+                for (var c = 0; c < ableA.ColumnCount; c++)
+                    if (ableA[r,c] != ableB[r,c]) return false;
+
+            return true;
+        }
+
+
+        public static bool IsSameAs(this Matrix<float> ableA, Matrix<float> ableB)
+        {
+            if (ableA.RowCount != ableB.RowCount) return false;
+            if (ableA.ColumnCount != ableB.ColumnCount) return false;
+
+            for (var r = 0; r < ableA.RowCount; r++)
+                for (var c = 0; c < ableA.ColumnCount; c++)
+                    if (Math.Abs(ableA[r,c] - ableB[r,c]) > NumUt.Epsilon) return false;
+
+            return true;
         }
     }
 }
