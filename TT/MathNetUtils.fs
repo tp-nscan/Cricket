@@ -18,10 +18,16 @@ module VecUt =
         let chunk = mVals |> Seq.take length |> Seq.toArray
         DenseVector.init length (fun x  -> chunk.[x])
 
-        // given the length, and a sequence of values, a dense vector is produced
+
+    // given the length, an a sequence of values, a sparse vector is produced
     let SparseFromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
                  length (mVals:seq<int*'a>) =
         Vector<'a>.Build.SparseOfIndexed(length, mVals)
+
+
+    let GetSparseF32Tuples (vec:Vector<float32>) =
+        { 0 .. (vec.Count - 1) } |> Seq.mapi(fun i v -> (i, vec.At(i)))
+                                 |> Seq.filter(fun tup -> (snd tup) > 0.0f)
 
 
     // given the length, and a sequence of values, a dense vector is produced
@@ -52,7 +58,7 @@ module GenVec =
                      (fun x -> valA.[x])
 
 
-    let RandSparse length count seed =
+    let RandSparseF32 length count seed =
         let valA = GenS.SeqOfRandUF32 (GenV.Twist seed)
                 |> Seq.take(count)
         let dexA = GenS.SeqOfRandZN length (GenV.Twist seed)
@@ -61,25 +67,21 @@ module GenVec =
         VecUt.SparseFromSeq length (Seq.zip dexA valA)
 
 
-
-//    let DenseInt max length seed =
-//        let valA = GenS.SeqOfRandZN max (GenV.Twist seed)
-//                   |> Seq.take(length)
-//                   |> Seq.toArray
-//        DenseVector.init length
-//                     (fun x -> valA.[x])
-
-
     
 module MatrixUt =
 
-    // given the size of the square matrix, and a sequence of values, a 2d
+    // given the shape of the matrix, and a complete sequence of values, a 2d dense
     // matrix is produced
     let DenseFromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
                  rows cols (mVals:seq<'a>) =
         let chunk = mVals |> Seq.take (rows*cols) |> Seq.toArray
         DenseMatrix.init rows cols (fun x y -> chunk.[x*cols + y])
 
+    // given the shape of the matrix, and a sequence of values, a 2d sparse
+    // matrix is produced
+    let SparseFromSeq<'a when 'a:(new:unit->'a) and 'a:struct and 'a:> IEquatable<'a> and 'a:> IFormattable and 'a:> ValueType>
+                 rows cols (mVals:seq<int*int*'a>) =
+        Matrix<'a>.Build.SparseOfIndexed(rows, cols, mVals)
 
     let ToRowMajorSequence (matrix:Matrix<'a>) = 
          matrix.ToArray() |> Seq.cast<'a>
@@ -128,12 +130,12 @@ module MatrixUt =
             }
 
 
-    let ToP2VSparse (m:Matrix<float32>) =
+    let GetSparseF32Tuples (m:Matrix<float32>) =
         seq { for row in 0 .. m.RowCount - 1 do
                     for col in 0 .. m.ColumnCount - 1 do
                     let v = m.[row, col]
-                    if Math.Abs(v) < NumUt.Epsilon then
-                        yield {P2V.X = row; Y=col; V = m.[row, col]}
+                    if Math.Abs(v) > NumUt.Epsilon then
+                        yield (row, col, v)
             }
 
 
@@ -198,14 +200,15 @@ module GenMatrix =
                      (fun x y -> valA.[y * bounds.X + x])
 
 
-    let SparseVals length count seed =
+    let RandSparseF32 (bounds:Sz2<int>) count seed =
         let valA = GenS.SeqOfRandUF32 (GenV.Twist seed)
-                |> Seq.take(count)
+                    |> Seq.take(count)
+        let rSeq = GenS.SeqOfRandZN bounds.Y (GenV.Twist (seed + 1777))
+                    |> Seq.take(count)
+        let cSeq = GenS.SeqOfRandZN bounds.X (GenV.Twist seed)
+                    |> Seq.take(count)
+        let m3 = Seq.zip3 rSeq cSeq valA
+                    |> Seq.take(count)
+                    |> Seq.distinctBy id
 
-        let pos = GenS.SeqOfRandZN length (GenV.Twist seed)
-                |> GenBT.P2ofSeq
-                |> Seq.take(count)
-                |> Seq.distinctBy id
-        pos |> Seq.map2(fun v d -> {P2V.X=d.X; Y=d.Y; V=v}) valA 
-
-
+        MatrixUt.SparseFromSeq bounds.Y bounds.X m3

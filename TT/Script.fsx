@@ -244,8 +244,14 @@ ColorSets.QuadColorRing 2 Colors.Black Colors.White Colors.Red Colors.Blue |> Se
 #load "Partition.fs"
 #load "DesignData.fs"
 #load "MathNetUtils.fs"
+#load "MathNetConv.fs"
 #load "Grid2dCnxn.fs"
 open TT
+
+let bounds = {Sz2.X=5; Y=4}
+let aIn = GenMatrix.RandSparseF32 bounds 9 1283
+let base64 = MathNetConv.SparseF32MatrixToBase64 aIn
+MathNetConv.Base64ToSparseF32Matrix bounds base64
 
 Grid2dCnxn.AllOffsets {Sz2.X=5; Y=4} Grid2dCnxn.StarNbrs |> Seq.toArray
 A2dUt.Raster2d {Sz2.X=5; Y=4} |> Seq.toArray

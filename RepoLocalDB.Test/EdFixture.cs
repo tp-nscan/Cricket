@@ -17,6 +17,7 @@ namespace RepoLocalDB.Test
             Assert.IsTrue(intsIn.IsSameAs(intsOut));
         }
 
+
         [TestMethod]
         public void TestF32AToBase64()
         {
@@ -40,6 +41,7 @@ namespace RepoLocalDB.Test
             Assert.IsTrue(aIn.IsSameAs(aOut));
         }
 
+
         [TestMethod]
         public void TestFloatA2ToBase64()
         {
@@ -51,8 +53,9 @@ namespace RepoLocalDB.Test
             Assert.IsTrue(aIn.IsSameAs(aOut));
         }
 
+
         [TestMethod]
-        public void TestFloatDenseVectorToBase64()
+        public void TestDenseF32VectorToBase64()
         {
             var bound = 23;
             var aIn = GenVec.DenseF32(bound, 123);
@@ -64,7 +67,7 @@ namespace RepoLocalDB.Test
 
 
         [TestMethod]
-        public void TestIntDenseMatrixToBase64()
+        public void TestDenseF32MatrixToBase64()
         {
             var bounds = new Sz2<int>(3, 5);
             var aIn = GenMatrix.DenseF32(bounds, 123);
@@ -74,5 +77,28 @@ namespace RepoLocalDB.Test
             Assert.IsTrue(aIn.IsSameAs(aOut));
         }
 
+
+        [TestMethod]
+        public void TestSparseF32VectorToBase64()
+        {
+            var bound = 23;
+            var aIn = GenVec.RandSparseF32(bound, 12, 123);
+            var base64 = MathNetConv.SparseF32VectorToBase64(aIn);
+            var aOut = MathNetConv.Base64ToSparseF32Vector(bound, base64.Item1, base64.Item2);
+
+            Assert.IsTrue(aIn.IsSameAs(aOut));
+        }
+
+
+        [TestMethod]
+        public void TestSparseF32MatrixToBase64()
+        {
+            var bounds = new Sz2<int>(3, 5);
+            var aIn = GenMatrix.RandSparseF32(bounds, 8, 123);
+            var base64 = MathNetConv.SparseF32MatrixToBase64(aIn);
+            var aOut = MathNetConv.Base64ToSparseF32Matrix(bounds, base64.Item1, base64.Item2, base64.Item3);
+
+            Assert.IsTrue(aIn.IsSameAs(aOut));
+        }
     }
 }

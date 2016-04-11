@@ -87,20 +87,18 @@ module BTconv =
 
 module MathNetConv =
 
-    let Base64ToDenseIntVector length strData =
-        let bytes = Convert.FromBase64String strData
-        DenseVector.init length (fun x  -> BitConverter.ToInt32(bytes, x * 4))
-
-
     let Base64ToDenseF32Vector length strData =
         let bytes = Convert.FromBase64String strData
         DenseVector.init length (fun x  -> BitConverter.ToSingle(bytes, x * 4))
 
 
-    let Base64ToDenseIntMatrix (bounds:Sz2<int>) strData =
-        let bytes = Convert.FromBase64String strData
-        DenseMatrix.init bounds.Y bounds.X (fun r c  -> 
-            BitConverter.ToInt32(bytes, (r * bounds.X + c ) * 4))
+    let Base64ToSparseF32Vector length (strData:(string*string)) =
+        let dexBytes = Convert.FromBase64String (fst strData)
+        let valBytes = Convert.FromBase64String (snd strData)
+        let mVals = seq {0 .. (dexBytes.GetLength(0) / 4) - 1}
+                    |> Seq.map(fun i -> ( BitConverter.ToInt32(dexBytes, i * 4),
+                                          BitConverter.ToSingle(valBytes, i * 4)))
+        Vector<float32>.Build.SparseOfIndexed(length, mVals)
 
 
     let Base64ToDenseF32Matrix (bounds:Sz2<int>) strData =
@@ -109,12 +107,17 @@ module MathNetConv =
             BitConverter.ToSingle(bytes, (r * bounds.X + c ) * 4))
 
 
-    let DenseIntVectorToBase64 (intV:Vector<int>) =
-        Seq.init (intV.Count) (fun i -> BitConverter.GetBytes(intV.[i]))
-        |> Seq.concat 
-        |> Seq.toArray
-        |> Convert.ToBase64String
-
+    let Base64ToSparseF32Matrix (bounds:Sz2<int>) (strData:(string*string*string)) =
+        let (rDexes, colDexes, vals) = strData
+        let rowBytes = Convert.FromBase64String rDexes
+        let colBytes = Convert.FromBase64String colDexes
+        let valBytes = Convert.FromBase64String vals
+        let mVals = seq {0 .. (rowBytes.GetLength(0) / 4) - 1}
+                    |> Seq.map(fun i -> ( BitConverter.ToInt32(rowBytes, i * 4),
+                                          BitConverter.ToInt32(colBytes, i * 4),
+                                          BitConverter.ToSingle(valBytes, i * 4)))
+        Matrix<float32>.Build.SparseOfIndexed(bounds.Y, bounds.X, mVals)
+        
 
     let DenseF32VectorToBase64 (f32V:Vector<float32>) =
         Seq.init (f32V.Count) (fun i -> BitConverter.GetBytes(f32V.[i]))
@@ -123,17 +126,48 @@ module MathNetConv =
         |> Convert.ToBase64String
 
 
-    let DenseIntMatrixtoBase64 (intM:Matrix<int>) =
-        intM |> MatrixUt.ToRowMajorSequence
+    let SparseF32VectorToBase64 (f32V:Vector<float32>) =
+        let tups = VecUt.GetSparseF32Tuples(f32V)
+        let strDex = tups |> Seq.map(fun t -> BitConverter.GetBytes(fst t)) 
+                          |> Seq.concat
+                          |> Seq.toArray
+                          |> Convert.ToBase64String
+
+        let strVals = tups |> Seq.map(fun t -> BitConverter.GetBytes(snd t)) 
+                           |> Seq.concat
+                           |> Seq.toArray
+                           |> Convert.ToBase64String
+
+        (strDex, strVals)
+
+
+    let DenseF32MatrixtoBase64 (f32M:Matrix<float32>) =
+        f32M |> MatrixUt.ToRowMajorSequence
         |> Seq.map (fun i -> BitConverter.GetBytes(i))
         |> Seq.concat 
         |> Seq.toArray
         |> Convert.ToBase64String
 
 
-    let DenseF32MatrixtoBase64 (intM:Matrix<float32>) =
-        intM |> MatrixUt.ToRowMajorSequence
-        |> Seq.map (fun i -> BitConverter.GetBytes(i))
-        |> Seq.concat 
-        |> Seq.toArray
-        |> Convert.ToBase64String
+    let SparseF32MatrixToBase64 (f32M:Matrix<float32>) =
+        let T1 (a,b,c) = a
+        let T2 (a,b,c) = b
+        let T3 (a,b,c) = c
+
+        let tups = MatrixUt.GetSparseF32Tuples(f32M)
+        let strRows = tups |> Seq.map(fun t -> BitConverter.GetBytes((T1 t))) 
+                           |> Seq.concat
+                           |> Seq.toArray
+                           |> Convert.ToBase64String
+
+        let strCols = tups |> Seq.map(fun t -> BitConverter.GetBytes((T2 t))) 
+                           |> Seq.concat
+                           |> Seq.toArray
+                           |> Convert.ToBase64String
+
+        let strVals = tups |> Seq.map(fun t -> BitConverter.GetBytes(T3 t)) 
+                           |> Seq.concat
+                           |> Seq.toArray
+                           |> Convert.ToBase64String
+
+        (strRows, strCols, strVals)

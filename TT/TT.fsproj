@@ -57,7 +57,7 @@
     <Compile Include="Gen.fs" />
     <Compile Include="Partition.fs" />
     <Compile Include="MathNetUtils.fs" />
-    <Compile Include="Ed2.fs" />
+    <Compile Include="MathNetConv.fs" />
     <Compile Include="FuncTable.fs" />
     <Compile Include="Glauber.fs" />
     <Compile Include="ColorSets.fs" />
