@@ -199,17 +199,17 @@ module Grid2dCnxn =
             (z4.Y1*stride + z4.X1, z4.Y2*stride + z4.X2, z4.V))
 
 
-    let Matrix3TupleToZ4 (stride:int) (tuples: seq<Tuple<int,int,float32>>) =
-        tuples |> Seq.map(fun t-> 
-            let ax1 = Coordify stride t.Item1
-            let ax2 = Coordify stride t.Item2
-            {
-                LS2V.X1  = ax1.X; 
-                      X2  = ax1.Y; 
-                      Y1  = ax2.X;
-                      Y2  = ax2.Y;
-                      V = t.Item3
-             })
+    //let Matrix3TupleToZ4 (stride:int) (tuples: seq<Tuple<int,int,float32>>) =
+    //    tuples |> Seq.map(fun t-> 
+    //        let ax1 = Coordify stride t.
+    //        let ax2 = Coordify stride t.Item2
+    //        {
+    //            LS2V.X1  = ax1.X; 
+    //                  X2  = ax1.Y; 
+    //                  Y1  = ax2.X;
+    //                  Y2  = ax2.Y;
+    //                  V = t.Item3
+    //         })
 
 
     let LS2VForGridWithRingNbrs (stride:int) =
